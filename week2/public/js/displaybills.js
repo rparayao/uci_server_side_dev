@@ -5,18 +5,12 @@
  * 01/31/2020
  */
 
-
-
 let initbills = new Array();
 
-//for test without server
 let initData = [{index: 0, label: "Local-American Express", amount: 250.0, category: "Credit Card"}, 
  			 {index: 1, label: "Local-Car Payment", amount:200.00, category: "Transportation"}, 
- 			 {index: 2, label: "Local-Rail pass", amount:200.00, category: "Transportation"}, 
- 			 {index: 3, label: "Local-Phone", amount: 125.00, category: "Utilities"}, 
- 			 {index: 4, label: "Local-Electric", amount: 80.0, category: "Utilities"},
- 			 {index: 5, label: "Local-Water", amount: 30.0, category: "Utilities"}];
-
+ 			 {index: 2, label: "Local-Electric", amount: 80.0, category: "Utilities"},
+ 			 {index: 3, label: "Local-Water", amount: 30.0, category: "Utilities"}];
 
 			
 
@@ -134,16 +128,6 @@ const calculateCurrent =(bills)=>{
 	return amount;
 }
 
-/**
- * 
- * @param {*} newBill 
- * @param {*} bills 
- */
-const addBill = (newBill, bills)=>{
-	let newBills = [...bills, newBill];
-	console.log(newBills);		
-	return newBills;
-}
 
 /**
  * update current bill
@@ -165,40 +149,28 @@ function getMaxIndex(){
 }
 
 
-/**
- * 
- * @param {*} e 
- */
-const submitHandler = e =>{
-	console.log("Adding bill item...");
+
+//ADDED FOR WEEK2 
+const submitHandler = async e => {
 	e.preventDefault();
-	const newBills = createNewBill();
-	if (!newBills){
-		return 
-	};
-	initbills = [...initbills, newBills];
-	createBillItem(newBills);
-	showAmountLeft();	
-}
 
-   
+	const response = await fetch('/api/add/999');
+	const item = await response.json();
 
-/**
- * 
- * @param {*} bills 
- * @param {*} item 
- */
-const deleteBill = (bills, item)=>{
-	const index = bills.findIndex(bill => bill.index ===item);
-	bills.splice(index,1);
+	alert("About to add: " +  JSON.stringify(item));
+  };
 
-	let billDelete = $(`#bill-item${item}`);
-	if (billDelete){
-		billDelete[0].parentNode.removeChild(billDelete[0])	
-	}
-	showAmountLeft();
-	saveBillsToStore(bills);	
-}
+
+
+const deleteBill = async (bills, index)=>{
+	const response = await fetch('/api/delete/' + index);
+	const item = await response.json();
+
+	alert("About to delete: " +  JSON.stringify(item));
+} 
+//ADDED FOR WEEK2 
+
+
 
 /**
  * create a bill item
@@ -222,7 +194,6 @@ const createListOfBills=(bills)=>{
 		createBillItem(bill);
 	});
 	showAmountLeft();
-	saveBillsToStore(bills);
 }
 
 
