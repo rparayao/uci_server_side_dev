@@ -151,10 +151,25 @@ function getMaxIndex(){
 
 
 //ADDED FOR WEEK2 
+// const createNewBill = () =>{
+// 	const label = $("#input-label").val();
+// 	const category = $("#input-cat").val(); 
+// 	const amount = Number.parseFloat($("#input-amount").val());
+// 	const index = getMaxIndex() + 1;
+
+// 	let newBill = {index, label, category, amount};
+// 	return newBill;
+// }
+
+
 const submitHandler = async e => {
 	e.preventDefault();
 
-	const response = await fetch('/api/add/999');
+	const label = $("#input-label").val();
+	const category = $("#input-cat").val(); 
+	const amount = Number.parseFloat($("#input-amount").val());
+
+	const response = await fetch('/api/add/' + label + "/" + category + "/" + amount);
 	const item = await response.json();
 
 	alert("About to add: " +  JSON.stringify(item));

@@ -15,10 +15,11 @@ app.use('/', staticRoute);
 
 //add bill item
 const addItem = (req, res) =>{
-    const item = addBillItem();
+    const {label, category, amount} = req.params || {};
+    const item = addBillItem(label, category, amount);
     res.json(item);
 };
-app.get('/api/add/:id', addItem);
+app.get('/api/add/:label/:category/:amount', addItem);
 
 //delete bill item
 const deleteItem = (req, res) =>{
@@ -30,6 +31,8 @@ const deleteItem = (req, res) =>{
 app.get('/api/delete/:id', deleteItem)
 
 
-app.listen(8001, () => console.log('Listening on 8001'));
+app.listen(8001, () => console.log("Listening on 8000\n" +
+                                    "\tCreate Bill button sends a get request to /api/add endpoint.\n" +
+                                    "\tDelete icon button sends a get request to /api/delete endpoint."));
 
 app.all('*', (req, res) => res.status(404).send("<h1>Page not found</h1>"));

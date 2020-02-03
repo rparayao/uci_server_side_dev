@@ -29,15 +29,12 @@ export const deleteBillItem = id =>{
 
 
 //update array with newly created bill item
-export const addBillItem = () =>{
+export const addBillItem = (label, category, amount) =>{
     const index = getMaxIndex() + 1;
-
-    const label = "Place-holder: " + index;
-    const category = "Place-holder: " + index; 
-    const amount = 999.9;
-    
-    let newBill = {index, label, category, amount};
-    initData.push(newBill);
-    return newBill;
+    if (label && category && amount){
+        let newBill = {index, label, category, amount};
+        initData.push(newBill);
+        return newBill;
+    }
 }
 //FOR EXPORT
