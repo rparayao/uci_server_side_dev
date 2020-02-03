@@ -6,7 +6,7 @@
  */
 
 import express from 'express';
-import { deleteBillItem, addBillItem } from './bills'
+import { deleteBillItem, addBillItem, getBillItems } from './bills'
 
 const app = express();
 const staticRoute = express.static('public');
@@ -25,11 +25,17 @@ app.get('/api/add/:label/:category/:amount', addItem);
 const deleteItem = (req, res) =>{
     const {id} = req.params || {};
     const item = deleteBillItem(parseFloat(id));
-    console.log(JSON.stringify(item));
-    res.json(item).send();
+    res.json(item);
 };
 app.get('/api/delete/:id', deleteItem)
 
+
+//get all bill items
+const billItems = (req, res) =>{
+    const items = getBillItems();
+    res.json(items);
+};
+app.get('/api/bills', billItems)
 
 app.listen(8000, () => console.log("Listening on 8000\n" +
                                     "\tCreate Bill button sends a get request to /api/add endpoint.\n" +

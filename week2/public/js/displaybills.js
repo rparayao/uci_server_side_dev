@@ -7,13 +7,6 @@
 
 let initbills = new Array();
 
-let initData = [{index: 0, label: "Local-American Express", amount: 250.0, category: "Credit Card"}, 
- 			 {index: 1, label: "Local-Car Payment", amount:200.00, category: "Transportation"}, 
- 			 {index: 2, label: "Local-Electric", amount: 80.0, category: "Utilities"},
- 			 {index: 3, label: "Local-Water", amount: 30.0, category: "Utilities"}];
-
-			
-
 let monthlyBudget = 2000.0
 let monthlyLeft = 0;
 let monthlyCurrent = 0;
@@ -35,48 +28,6 @@ Bill.prototype.getIndex = () =>{
 //class for bill item
 
 
-//ajax
-var initialDataFromJson;
-const loadInitialData = () =>{
-	var xhr= new XMLHttpRequest();
-     
-	if (!xhr) {
-		alert('Giving up :( Cannot create an XMLHTTP instance');
-		return false;
-	}
-	let url = "initialData.json"
-	xhr.open('GET', url, true);
-	xhr.send();
-	xhr.onreadystatechange = processAjaxData(xhr);
-
-}
-
-/**
- * process data from ajax
- * @param {*} xhr 
- */
-const processAjaxData = (xhr) =>{
-	
-	if (xhr.readyState === XMLHttpRequest.DONE) {
-    	if (xhr.status === 200) {
-    		initialDataFromJson = JSON.parse(xhr.responseText);
-      		console.log(initialDataFromJson);
-    	} else {
-      		alert('There was a problem with the request.');
-    	}
-
-		$.each(initialDataFromJson, function(i, data){
-			initbills = [...initbills, new Bill(data.index, data.label, data.amount, data.category)]
-		})
-	} else {
-		//test to support testing without server
-		$.each(initData, function(i, data){
-			initbills = [...initbills, new Bill(data.index, data.label, data.amount, data.category)]
-		})
-		//test to support testing without server
-	}
-}
-//ajax
 
 
 /**
@@ -94,7 +45,6 @@ $(document).ready(function(){
 	});
 
 	startingAmt.val(monthlyBudget);
-	createListOfBills(initbills);
 
 	$("#input-amt-left").val(calculateLeft(monthlyBudget, initbills));		
 	
@@ -148,18 +98,16 @@ function getMaxIndex(){
   return initbills.reduce((max, b) => Math.max(max, b.index), initbills[0].index);
 }
 
-
-
-//ADDED FOR WEEK2 
-// const createNewBill = () =>{
-// 	const label = $("#input-label").val();
-// 	const category = $("#input-cat").val(); 
-// 	const amount = Number.parseFloat($("#input-amount").val());
-// 	const index = getMaxIndex() + 1;
-
-// 	let newBill = {index, label, category, amount};
-// 	return newBill;
-// }
+//WEEK 2 AJAX
+const loadInitialData = async () =>{
+	const response = await fetch('/api/bills');
+	const item = await response.json();
+	$.each(item, function(i, data){
+		initbills = [...initbills, new Bill(data.index, data.label, data.amount, data.category)]
+	})
+	createListOfBills(initbills);
+	return 1;
+} 
 
 
 const submitHandler = async e => {
@@ -183,7 +131,7 @@ const deleteBill = async (bills, index)=>{
 
 	alert("About to delete: " +  JSON.stringify(item));
 } 
-//ADDED FOR WEEK2 
+//ADDED FOR WEEK2 --AJAX
 
 
 

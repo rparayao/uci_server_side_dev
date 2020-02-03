@@ -18,8 +18,7 @@ function getMaxIndex(){
     return initData.reduce((max, b) => Math.max(max, b.index), initData[0].index);
 }
 //FOR EXPORT
-export const getBillItem = id =>
-	initData.find(bill =>bill.index === id);
+export const getBillItems = () => initData;
 
 
 export const deleteBillItem = id =>{
