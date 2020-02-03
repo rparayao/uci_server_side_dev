@@ -31,7 +31,7 @@ const deleteItem = (req, res) =>{
 app.get('/api/delete/:id', deleteItem)
 
 
-app.listen(8001, () => console.log("Listening on 8000\n" +
+app.listen(8000, () => console.log("Listening on 8000\n" +
                                     "\tCreate Bill button sends a get request to /api/add endpoint.\n" +
                                     "\tDelete icon button sends a get request to /api/delete endpoint."));
 
