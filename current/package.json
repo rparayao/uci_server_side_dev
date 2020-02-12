@@ -1,0 +1,32 @@
+{
+  "name": "uci_server_side_dev",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^6.8.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "lint": "^0.7.0",
+    "mocha": "^7.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node -r esm ./src/index.js",
+    "test": "mocha -r esm ./test/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rparayao/uci_server_side_dev.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rparayao/uci_server_side_dev/issues"
+  },
+  "homepage": "https://github.com/rparayao/uci_server_side_dev#readme"
+}

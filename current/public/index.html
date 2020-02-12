@@ -1,0 +1,60 @@
+<!--
+ * Remi Parayao
+ * I&C SCI_X472.15: Sever-side development
+ * 
+ * 01/31/2020
+-->
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Budget Tracker</title>
+		<link href="css/index.css" rel="stylesheet">
+		<link href="css/jquery-ui.css" rel="stylesheet">
+		<script src="js/jquery-3.4.1.js" type="text/javascript"></script>
+		<script src="js/jquery-ui.js" type="text/javascript"></script>
+		<script src="js/displaybills.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<main>
+			<div id="header">
+				<div class="headContainer">
+					<img src="images/header.svg">
+				</div>
+			</div>
+
+			<div id="budget-tracking">
+				<div class="monthly">
+					<div class="monthly-total">
+						<div id='monthly-amount'><label>&#36;&nbsp;</label><input id='input-start-amt' value=2000 title="Starting amount for this month"></div>	         
+							<div>Monthly Total</div>
+						</div>
+					<div class="monthly-left">
+						<div id='left-amount'><label>&#36;&nbsp;</label><input id='input-amt-left' value=1590 readonly title="Remaining amount left for this month"/></div>	         
+						<div>Remaining</div>
+					</div>
+				</div>
+
+			<div class="add-bill">
+				<form>
+					<label>Label</label> <input id="input-label" value="New Bill" title="Enter label for bill item"/> <label>Category:
+					</label>
+					<select id="input-cat">
+						<option value="Credit Card">Credit Card</option>
+						<option value="Transportation">Transportation</option>
+						<option value="Utilities">Utilities</option>
+					</select> 
+					<label>Amount: &#36;</label>
+					<input id="input-amount" name="amount" value="0" title="Enter amount"/>					
+					<input id="createButton" type="submit" value="Create Bill" title="Create a bill item"/>
+			</form>
+		</div>
+
+
+		<hr/>
+		<div id='div-bill-item'>
+					
+			</div>
+		</div>
+	</main>
+	</body>
+</html>
