@@ -15,15 +15,15 @@ date.setDate(date.getDate() + 30, 1);
 
 
 //class for bill item
-function Bill(index, label, amount, category){
-	this.index = index;
+function Bill(id, label, amount, category){
+	this.id = id;
 	this.label = label;
 	this.amount = amount;
 	this.category = category;
 }
 
-Bill.prototype.getIndex = () =>{
-	this.index;
+Bill.prototype.getId = () =>{
+	this.id;
 }
 //class for bill item
 
@@ -86,24 +86,24 @@ const calculateCurrent =(bills)=>{
  * @param {*} amount 
  */
 const updateBill = (bills, item, amount)=>{
-	const index = bills.findIndex(bill => `amount${bill.index}`===item);
-	bills[index].amount = amount;
+	const id = bills.findIndex(bill => `amount${bill.id}`===item);
+	bills[id].amount = amount;
 }
 
 
-/**
- * find next max index
- */
-function getMaxIndex(){
-  return initbills.reduce((max, b) => Math.max(max, b.index), initbills[0].index);
-}
+// /**
+//  * find next max id
+//  */
+// function getMaxId(){
+//   return initbills.reduce((max, b) => Math.max(max, b.id), initbills[0].id);
+// }
 
 //WEEK 2 AJAX
 const loadInitialData = async () =>{
-	const response = await fetch('/api/bills');
+	const response = await fetch('/api/read');
 	const item = await response.json();
 	$.each(item, function(i, data){
-		initbills = [...initbills, new Bill(data.index, data.label, data.amount, data.category)]
+		initbills = [...initbills, new Bill(data.id, data.label, data.amount, data.category)]
 	})
 	createListOfBills(initbills);
 	return 1;
@@ -117,19 +117,29 @@ const submitHandler = async e => {
 	const category = $("#input-cat").val(); 
 	const amount = Number.parseFloat($("#input-amount").val());
 
-	const response = await fetch('/api/add/' + label + "/" + category + "/" + amount);
+	const response = await fetch('/api/create/' + label + "/" + category + "/" + amount);
 	const item = await response.json();
+	createBillItem(item);
+	showAmountLeft();	
 
-	alert("About to add: " +  JSON.stringify(item));
+	// alert("About to add: " +  JSON.stringify(item));
   };
 
 
 
-const deleteBill = async (bills, index)=>{
-	const response = await fetch('/api/delete/' + index);
+const deleteBill = async (bills, id)=>{
+	const response = await fetch('/api/delete/' + id);
 	const item = await response.json();
+	//remove from display
+	if (item !== undefined){
+		const index = bills.findIndex(bill => bill.id === item.id);
+		bills.splice(index,1);
 
-	alert("About to delete: " +  JSON.stringify(item));
+		let billDelete = $(`#bill-item${item.id}`);
+		if (billDelete){
+			billDelete[0].parentNode.removeChild(billDelete[0])	
+		}
+	}
 } 
 //ADDED FOR WEEK2 --AJAX
 
@@ -138,15 +148,15 @@ const deleteBill = async (bills, index)=>{
 /**
  * create a bill item
  */
-const createNewBill = () =>{
-	const label = $("#input-label").val();
-	const category = $("#input-cat").val(); 
-	const amount = Number.parseFloat($("#input-amount").val());
-	const index = getMaxIndex() + 1;
+// const createNewBill = () =>{
+// 	const label = $("#input-label").val();
+// 	const category = $("#input-cat").val(); 
+// 	const amount = Number.parseFloat($("#input-amount").val());
+// 	const id = getMaxId() + 1;
 
-	let newBill = {index, label, category, amount};
-	return newBill;
-}
+// 	let newBill = {id, label, category, amount};
+// 	return newBill;
+// }
 
 /**
  * create list of bills
@@ -167,7 +177,7 @@ const createListOfBills=(bills)=>{
  */
 const createBillItem=(bill)=>{
 	let billItem = $("<div>");
-	billItem.attr({"class":"bill-item", "id":"bill-item" + bill.index});
+	billItem.attr({"class":"bill-item", "id":"bill-item" + bill.id});
 
 	let category = $("<div>");
 	category.attr({"class":"categoryIcon"});
@@ -195,7 +205,7 @@ const createBillItem=(bill)=>{
 	let dueDateDiv = $("<div>");
 	dueDateDiv.attr({"id": "due-date"});
 	let dueDate = $("<input>");
-	dueDate.attr({"id":"dueDate" + bill.index, "type":"text", "size":"16"});
+	dueDate.attr({"id":"dueDate" + bill.id, "type":"text", "size":"16"});
 	dueDateDiv.append("Due Date: ");	
 	dueDateDiv.append(dueDate);
 	//due date
@@ -222,7 +232,7 @@ const createBillItem=(bill)=>{
                   .toString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	amount.attr({"type":"text", 
-				 "id": `amount${bill.index}`, 
+				 "id": `amount${bill.id}`, 
 				 "pattern":"[0-9]*", 
 				 "size":"6",
 				 "value":valueFmt,
@@ -232,7 +242,7 @@ const createBillItem=(bill)=>{
 	//create delete button
 	let delButton = $("<button>");
 	delButton.attr({"type":"text", 
-					"id":`delete${bill.index}`, 
+					"id":`delete${bill.id}`, 
 					"class":"delete-icon"});
 
 	let image = $("<img>");
@@ -244,7 +254,7 @@ const createBillItem=(bill)=>{
 
 	$("#div-bill-item").append(billItem);
 	
-	$(`#amount${bill.index}`).on('blur', function (){    
+	$(`#amount${bill.id}`).on('blur', function (){    
         updateBill(initbills, this.id, Number(this.value));
 		this.value = parseFloat(this.value.replace(/,/g, ""))
             .toFixed(2)
@@ -254,16 +264,16 @@ const createBillItem=(bill)=>{
 		saveBillsToStore(initbills);
 	})
 
-	$(`#delete${bill.index}`).on('click', function (){    
-		console.log(`delete${bill.index}`);
+	$(`#delete${bill.id}`).on('click', function (){    
+		console.log(`delete${bill.id}`);
 		let choice = confirm ("Are you sure you want to delete?");
 		if ( choice ){
-			deleteBill(initbills, bill.index);
+			deleteBill(initbills, bill.id);
 		}
 	});
 
-	$("#dueDate" + bill.index).val(date.toLocaleDateString("en-US"));
-	$("#dueDate" + bill.index).datepicker({ minDate: +30, defaultDate: date, dateFormat: 'm/d/yy' });
+	$("#dueDate" + bill.id).val(date.toLocaleDateString("en-US"));
+	$("#dueDate" + bill.id).datepicker({ minDate: +30, defaultDate: date, dateFormat: 'm/d/yy' });
 }
 
 /**

@@ -2,9 +2,18 @@ module.exports  = {
     development: {
         client: 'mysql',
         connection: {
+            database: 'budget_tracker',
+            user: 'root',
+            password: ''
+        }
+    },
+    developmentx: {
+        client: 'mysql',
+        connection: {
             database: 'monthly-bills',
-            user: 'user1',
-            password: 'user1pw'
+            user: 'postgres',
+            password: 'postgrespw'
         }
     }
+
 };

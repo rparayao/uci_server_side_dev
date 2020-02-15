@@ -6,7 +6,7 @@
  */
 
 import express from 'express';
-import { deleteBillItem, addBillItem, getBillItems } from './bills'
+import { deleteBillItem, addBillItem, getBillItem } from './services/bills'
 
 const app = express();
 const staticRoute = express.static('public');
@@ -14,28 +14,40 @@ app.use('/', staticRoute);
 
 
 //add bill item
-const addItem = (req, res) =>{
+const createItem = (req, res) =>{
     const {label, category, amount} = req.params || {};
     const item = addBillItem(label, category, amount);
     res.json(item);
 };
-app.get('/api/add/:label/:category/:amount', addItem);
 
 //delete bill item
-const deleteItem = (req, res) =>{
+const deleteItem = async (req, res) =>{
+    console.log("About to delete...");
     const {id} = req.params || {};
-    const item = deleteBillItem(parseFloat(id));
+    const item = await deleteBillItem(parseFloat(id));
     res.json(item);
 };
-app.get('/api/delete/:id', deleteItem)
 
+//get all bill items from DB
+const getItem = async (req, res) =>{
+    console.log(JSON.stringify(req.params));
+    console.log(JSON.stringify(req.query));
+    console.log(req.query);
+    console.log(Object.entries(req.query).length);
+    const {label, category, amount} = req.query || {};
+    const {filter} = req.params || {};
 
-//get all bill items
-const billItems = (req, res) =>{
-    const items = getBillItems();
+    const items = await getBillItem(filter, label, category, amount);
     res.json(items);
 };
-app.get('/api/bills', billItems)
+
+
+app.get('/api/create/:label/:category/:amount', createItem);
+app.get('/api/delete/:id', deleteItem);
+app.get('/api/read', getItem);
+app.get('/api/read/:filter', getItem);
+
+
 
 app.listen(8000, () => console.log("Listening on 8000\n" +
                                     "\tCreate Bill button sends a get request to /api/add endpoint.\n" +
