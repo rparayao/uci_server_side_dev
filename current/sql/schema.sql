@@ -1,3 +1,4 @@
+
 CREATE TABLE user_accounts (
   id integer PRIMARY KEY,
   display_name varchar(100) NOT NULL,
@@ -21,6 +22,13 @@ CREATE TABLE bill_items(
 	FOREIGN KEY (owner_id) REFERENCES user_accounts (id),
 	FOREIGN KEY (cat_id) REFERENCES bill_category (id)
 
+);
+
+CREATE TABLE monthly(
+	id integer PRIMARY KEY,
+	label text,
+	category text,
+	amount real not NULL
 );
 
 

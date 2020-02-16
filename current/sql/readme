@@ -1,0 +1,9 @@
+  Steps.
+  
+  /Library/PostgreSQL/10/bin/dropdb uci-server-side2 -U postgres
+  /Library/PostgreSQL/10/bin/createdb uci-server-side2 -U postgres
+  /Library/PostgreSQL/10/bin/psql -U postgres -d uci-server-side2 -f queries.sql 
+  /Library/PostgreSQL/10/bin/psql -U postgres -d uci-server-side2 -f schema.sql 
+  /Library/PostgreSQL/10/bin/psql -U postgres -d uci-server-side2 -f queries.sql 
+  /Library/PostgreSQL/10/bin/psql -U postgres -d uci-server-side2 -f seed.sql 
+  /Library/PostgreSQL/10/bin/psql -U postgres -d uci-server-side2 -f queries.sql 

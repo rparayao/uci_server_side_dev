@@ -24,3 +24,12 @@ VALUES
 (1, 101, 201, 'Monthly gas', 123.0),
 (2, 101, 202, 'Monthly Credit Card', 123.0),
 (3, 102, 203, 'Edison Bill', 23.0);
+
+
+
+INSERT INTO monthly
+(id, label, category,amount)
+VALUES
+(1, 'Monthly gas', 'Credit Card', 123.0),
+(2, 'Monthly Credit Card', 'Credit Card', 123.0),
+(3, 'Edison Bill', 'Utilities', 23.0);

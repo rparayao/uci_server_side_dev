@@ -6,7 +6,7 @@
  */
 
 import express from 'express';
-import { deleteBillItem, addBillItem, getBillItem } from './services/bills'
+import { deleteBillItem, addBillItem, getBillItem, updateBillItem } from './services/bills'
 
 const app = express();
 const staticRoute = express.static('public');
@@ -22,7 +22,6 @@ const createItem = (req, res) =>{
 
 //delete bill item
 const deleteItem = async (req, res) =>{
-    console.log("About to delete...");
     const {id} = req.params || {};
     const item = await deleteBillItem(parseFloat(id));
     res.json(item);
@@ -41,11 +40,21 @@ const getItem = async (req, res) =>{
     res.json(items);
 };
 
+//delete bill item
+const updateItem = async (req, res) =>{
+    console.log(JSON.stringify(req.params));
+
+    const {id, label, category, amount} = req.params || {};
+    const item = await updateBillItem(id, label, category, amount);
+    res.json(item);
+};
 
 app.get('/api/create/:label/:category/:amount', createItem);
 app.get('/api/delete/:id', deleteItem);
 app.get('/api/read', getItem);
 app.get('/api/read/:filter', getItem);
+app.get('/api/update/:id/:label/:category/:amount', updateItem);
+
 
 
 

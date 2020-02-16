@@ -85,20 +85,30 @@ const calculateCurrent =(bills)=>{
  * @param {*} item 
  * @param {*} amount 
  */
-const updateBill = (bills, item, amount)=>{
+const updateBillxxx = (bills, item, amount)=>{
 	const id = bills.findIndex(bill => `amount${bill.id}`===item);
 	bills[id].amount = amount;
 }
 
 
-// /**
-//  * find next max id
-//  */
-// function getMaxId(){
-//   return initbills.reduce((max, b) => Math.max(max, b.id), initbills[0].id);
-// }
+
+
 
 //WEEK 2 AJAX
+const updateBill =  async (bills, item, amount2)=>{
+	const idx = bills.findIndex(bill => `amount${bill.id}`===item);
+
+	let {id, label, category, amount} = bills[idx];
+	amount = amount2;
+	const response =  await fetch('/api/update/' + id + "/" + label + "/" + category + "/" + amount);
+	const newitem =  await response.json();
+	console.log('On update.. ' + JSON.stringify(newitem));
+	initbills[idx].amount = amount;
+	showAmountLeft();
+	bills[id].amount = amount;
+}
+
+
 const loadInitialData = async () =>{
 	const response = await fetch('/api/read');
 	const item = await response.json();
@@ -120,9 +130,10 @@ const submitHandler = async e => {
 	const response = await fetch('/api/create/' + label + "/" + category + "/" + amount);
 	const item = await response.json();
 	createBillItem(item);
+	initbills.push(item);
 	showAmountLeft();	
 
-	// alert("About to add: " +  JSON.stringify(item));
+	//alert("About to add: " +  JSON.stringify(item));
   };
 
 
@@ -132,31 +143,19 @@ const deleteBill = async (bills, id)=>{
 	const item = await response.json();
 	//remove from display
 	if (item !== undefined){
-		const index = bills.findIndex(bill => bill.id === item.id);
+		const index = bills.findIndex(bill => bill.id === id);
 		bills.splice(index,1);
 
-		let billDelete = $(`#bill-item${item.id}`);
+		let billDelete = $(`#bill-item${id}`);
 		if (billDelete){
 			billDelete[0].parentNode.removeChild(billDelete[0])	
 		}
+		showAmountLeft();
 	}
 } 
 //ADDED FOR WEEK2 --AJAX
 
 
-
-/**
- * create a bill item
- */
-// const createNewBill = () =>{
-// 	const label = $("#input-label").val();
-// 	const category = $("#input-cat").val(); 
-// 	const amount = Number.parseFloat($("#input-amount").val());
-// 	const id = getMaxId() + 1;
-
-// 	let newBill = {id, label, category, amount};
-// 	return newBill;
-// }
 
 /**
  * create list of bills
@@ -260,8 +259,7 @@ const createBillItem=(bill)=>{
             .toFixed(2)
             .toString()
 			.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-		showAmountLeft();
-		saveBillsToStore(initbills);
+//		saveBillsToStore(initbills);
 	})
 
 	$(`#delete${bill.id}`).on('click', function (){    

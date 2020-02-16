@@ -19,7 +19,9 @@ function getMaxIndex(){
 
 
 //FOR EXPORT
-export const insertBillItem = bill =>{
+export const updateBillItem = (id, label, category, amount) =>{
+    knex('monthly').update({id, label, category, amount}).where({ id }).then({});
+    return ({success: true});
 }
 
 
@@ -31,18 +33,17 @@ export const getBillItem = async(filter, label, category, amount) => {
 }
 
 
-export const deleteBillItem = id =>{
+export const deleteBillItem = async id =>{
     const billItem = initData.find(bill => bill.id ===id);
     if (billItem !== undefined){
-        console.log('1About to delete ' + JSON.stringify(billItem));
-        knex('monthly').where('id', billItem.id).del().
+        await knex('monthly').where('id', billItem.id).del().
             then(()=>{
                 //remove from array 
                 const index = initData.findIndex(bill => bill.id ===id);
                 initData.splice(index,1);        
             });
 
-        return billItem ;
+        return ({success: true});
     }
 }
 

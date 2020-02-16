@@ -1,18 +1,19 @@
 module.exports  = {
-    development: {
+    development_test: {
         client: 'mysql',
         connection: {
+            host: 'localhost',
             database: 'budget_tracker',
             user: 'root',
             password: ''
         }
     },
-    developmentx: {
-        client: 'mysql',
+    development: {
+        client: 'postgresql',
         connection: {
-            database: 'monthly-bills',
+            database: 'uci-server-side2',
             user: 'postgres',
-            password: 'postgrespw'
+            password: 'Remi2000'
         }
     }
 
