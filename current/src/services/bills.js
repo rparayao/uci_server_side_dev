@@ -24,8 +24,16 @@ export const updateBillItem = (id, label, category, amount) =>{
     return ({success: true});
 }
 
+export const getBillItemWithOptions = async(filter) => {
+    const data = await knex.select().from('monthly').where('label', filter);
+    console.log("Looking " + data);
+    console.log("Looking " + JSON.stringify(data));
 
-export const getBillItem = async(filter, label, category, amount) => {
+    return data;
+}
+
+
+export const getBillItem = async() => {
     if (initData.length === 0) {
         initData = await knex.select().from('monthly');
     }

@@ -35,6 +35,7 @@ Bill.prototype.getId = () =>{
  */
 $(document).ready(function(){
 	$("#createButton").on("click",submitHandler);
+	$("#findButton").on("click",findHandler);
 
 	loadInitialData();
 
@@ -79,22 +80,10 @@ const calculateCurrent =(bills)=>{
 }
 
 
-/**
- * update current bill
- * @param {*} bills 
- * @param {*} item 
- * @param {*} amount 
- */
-const updateBillxxx = (bills, item, amount)=>{
-	const id = bills.findIndex(bill => `amount${bill.id}`===item);
-	bills[id].amount = amount;
-}
 
 
 
-
-
-//WEEK 2 AJAX
+//AJAX
 const updateBill =  async (bills, item, amount2)=>{
 	const idx = bills.findIndex(bill => `amount${bill.id}`===item);
 
@@ -120,6 +109,18 @@ const loadInitialData = async () =>{
 } 
 
 
+
+const findHandler = async e => {
+	e.preventDefault();
+	const label = $("#input-find").val();
+	const response = await fetch('/api/read/' + label);
+	const item = await response.json();
+	if (item !== undefined){
+		alert("Found: " + JSON.stringify(item));
+	}
+}
+
+
 const submitHandler = async e => {
 	e.preventDefault();
 
@@ -132,8 +133,6 @@ const submitHandler = async e => {
 	createBillItem(item);
 	initbills.push(item);
 	showAmountLeft();	
-
-	//alert("About to add: " +  JSON.stringify(item));
   };
 
 
@@ -153,7 +152,7 @@ const deleteBill = async (bills, id)=>{
 		showAmountLeft();
 	}
 } 
-//ADDED FOR WEEK2 --AJAX
+//AJAX
 
 
 

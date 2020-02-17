@@ -13,7 +13,7 @@ module.exports  = {
         connection: {
             database: 'uci-server-side2',
             user: 'postgres',
-            password: 'Remi2000'
+            password: 'testPassword'
         }
     }
 
