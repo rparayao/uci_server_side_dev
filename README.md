@@ -7,5 +7,5 @@ Install new database and sample data:
 
 2.psql -U postgres -d uci-server-side2 -f schema.sql
 
-3. psql -U postgres -d uci-server-side2 -f seed.sql
+3.psql -U postgres -d uci-server-side2 -f seed.sql
 
