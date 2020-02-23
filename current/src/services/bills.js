@@ -48,7 +48,6 @@ export const getBillItem = () => {
 export const deleteBillItemOld = async idx =>{
     const billItem = initData.find(bill => bill.id ===idx);
     if (billItem !== undefined){
-        console.log("111Deleted: " + idx);
 
         await knex('bill_items').where({id: idx}).del().
             then(()=>{
