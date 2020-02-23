@@ -9,3 +9,15 @@ Install new database and sample data:
 
 3.psql -U postgres -d uci-server-side2 -f seed.sql
 
+
+Week5
+
+Supported commands
+
+npm run migrate --to migrate DB
+
+npm run rollback --to rollback DB
+
+npm run test --run unit test
+
+npm run db-test --dropdb, createdb, migrate db, seed db and rn test
