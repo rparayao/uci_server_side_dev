@@ -1,4 +1,4 @@
 import knex from 'knex'
-import { development } from './localknex.js';
+import config from '../knexfile.js';
 
-export default knex(development);
+export default knex(config[process.env.NODE_ENV || 'development']);

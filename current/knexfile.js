@@ -11,7 +11,15 @@ module.exports  = {
     development: {
         client: 'postgresql',
         connection: {
-            database: 'uci-server-side2',
+            database: 'monthly-bills',
+            user: 'postgres',
+            password: 'Remi2000'
+        }
+    },
+    test: {
+        client: 'postgresql',
+        connection: {
+            database: 'monthly-bills-test',
             user: 'postgres',
             password: 'Remi2000'
         }

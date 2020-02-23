@@ -1,2 +1,2 @@
-import './bills.spec.js';
+import './services/bills.spec.js';
 

@@ -19,8 +19,23 @@
   },
   "devDependencies": {},
   "scripts": {
+    "clean-db-test": "npm run reset-test-db; npm run test",
     "start": "node -r esm ./src/index.js",
-    "test": "mocha -r esm ./test/index.js"
+    "migrate": "knex migrate:latest",
+    "rollback": "knex migrate:rollback",
+    "make-db": "dropdb monthly-bills; createdb monthly-bills",
+    "seed": "knex seed:run --specific=user_accounts.js; knex seed:run --specific=bill_category.js; knex seed:run --specific=bill_items.js;",
+    "seed-test": "NODE_ENV=test knex seed:run --specific=user_accounts.js; NODE_ENV=test knex seed:run --specific=bill_category.js; NODE_ENV=test knex seed:run --specific=bill_items.js;",
+    "test": "NODE_ENV=test mocha --exit -r esm test/index.js",
+    "db-test": "npm run reset-test-db; npm run test",
+    "reset-db": "npm run make-db; npm run migrate; npm run seed",
+    "reset-test-db": "NODE_ENV=test npm run make-test-db; npm run migrate -- --env=test; npm run seed-test",
+    "make-test-db": "dropdb monthly-bills-test; createdb monthly-bills-test",
+    "reset-db2": "npm run make-db2; npm run migrate; npm run seed",
+    "db-test2": "npm run reset-test-db2; npm run test",
+    "reset-test-db2": "NODE_ENV=test npm run make-test-db2; npm run migrate -- --env=test; npm run seed-test",
+    "make-db2": "dropdb -U postgres monthly-bills; createdb -U postgres monthly-bills",
+    "make-test-db2": "dropdb -U postgres monthly-bills-test; createdb -U postgres monthly-bills-test"
   },
   "repository": {
     "type": "git",

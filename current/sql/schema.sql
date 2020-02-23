@@ -18,11 +18,9 @@ CREATE TABLE bill_items(
 	cat_id integer,
 	label text,
 	amount real not NULL,
-	duedate timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	FOREIGN KEY (owner_id) REFERENCES user_accounts (id),
-	FOREIGN KEY (cat_id) REFERENCES bill_category (id)
-
+	duedate timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
 
 CREATE TABLE monthly(
 	id integer PRIMARY KEY,
