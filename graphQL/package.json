@@ -1,0 +1,42 @@
+{
+  "name": "uci_server_side_dev",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^6.8.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "express-graphql": "^0.9.0",
+    "graphql": "^14.6.0",
+    "knex": "^0.20.10",
+    "lint": "^0.7.0",
+    "lokka": "^1.7.0",
+    "lokka-transport-http": "^1.6.1",
+    "mocha": "^7.0.0",
+    "mysql": "^2.18.1",
+    "pg": "^7.18.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "make-db": "dropdb book-list; createdb book-list",
+    "seed": "knex seed:run --specific=graphql.js",
+    "reset-db": "npm run make-db; npm run migrate; npm run seed",
+    "start": "node -r esm ./src/index.js",
+    "migrate": "knex migrate:latest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rparayao/uci_server_side_dev.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rparayao/uci_server_side_dev/issues"
+  },
+  "homepage": "https://github.com/rparayao/uci_server_side_dev#readme"
+}

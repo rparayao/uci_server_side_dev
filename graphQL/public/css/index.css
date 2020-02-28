@@ -1,0 +1,139 @@
+#budget-tracking {
+	margin: 0 auto;
+	width: max-content;
+	min-height: 500px;
+	position: relative;
+}
+
+#budget-tracking h1 {
+	position: absolute;
+	text-align: center;
+	top: 5px;
+	width: 100%
+}
+
+
+#budget-tracking form, #budget-tracking ul {
+	width: 620px;
+}
+
+#budget-tracking ul{
+	/* border: 1px solid black; */
+	left: 5px;
+	list-style-type: none;
+	min-height: 400px;
+	padding: 5px;
+	position: absolute;
+	top: 105px;
+	width: 490px;
+}
+
+#budget-tracking li{
+	background-color: white;
+	border: 1px solid black;
+	margin: 0.5em;
+	overflow: auto;
+	padding: 0.5em;
+}
+
+
+.bill-item {
+	display: flex; 
+    flex-direction:  row; 
+    padding: 5px; 
+    width: 460px;
+    height: 60px;
+    margin-left: 5px;
+}
+
+
+.bill-label {
+	display: flex; 
+    flex-direction:  column; 
+    padding: 5px; 
+    width: 360px;
+    height: 40px;
+    margin-left: 5px;
+}
+
+.bill-amount {
+	display: flex; 
+    flex-direction:  row; 
+    padding: 15px; 
+    width: 80px;
+    height: 15px;
+    margin-left: 5px;
+}
+
+#amount {
+    margin-bottom: 1px;
+    width: 60px;
+}
+
+.delete-icon{
+	width: 200px;
+	height: 18px;
+	background-color: transparent; 
+	border-color: transparent;
+}
+
+
+body{
+	background-color:#D4E0FF;
+	margin: 0px;
+	text-align: center;
+}
+#header {
+	background-color: #004167;
+    padding: 5px;
+    margin:0px;
+}
+.headContainer{
+	max-width: 500px;
+	width:100%;
+	margin-left: auto;
+	margin-right: auto;
+	color: white;
+}
+
+ .bill-label{
+ 	color:#004167;
+ 	font-weight:bold;
+ 	text-align: left;
+ }
+
+.bill-item {
+    margin: 10px 5px;
+    border-radius: 4px;
+    background-color:#F5F8FF;
+ }
+.bill-category{
+ 	color:#004167;
+ 	font-weight:normal;
+ 	font-size:.8em;
+ }
+
+
+ #approx-sales{
+	color:#004167;
+	font-weight:normal;
+	font-size:.8em;
+    height: 15px;
+}
+
+#div-bill-item{
+	/* border: 1px solid black; */
+	left: 5px;
+	list-style-type: none;
+	min-height: 400px;
+	padding-left: 95px;
+	padding-top: 70px;
+	position: absolute;
+	width: 490px;
+}
+
+main {
+    margin-left: auto;
+    margin-right: auto;
+    min-height: 300px
+}
