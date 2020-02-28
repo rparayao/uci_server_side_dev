@@ -1,27 +1,27 @@
 module.exports  = {
-    development: {
+    development_x: {
         client: 'mysql',
         connection: {
             host: 'localhost',
-            database: 'book_list',
+            database: 'book-list',
             user: 'root',
             password: ''
         }
     },
-    development_x: {
+    development: {
         client: 'postgresql',
         connection: {
             database: 'book-list',
             user: 'postgres',
-            password: 'Remi2000'
+            password: 'xxxxxx'
         }
     },
-    test_x: {
+    test: {
         client: 'postgresql',
         connection: {
             database: 'book-list-test',
             user: 'postgres',
-            password: 'Remi2000'
+            password: 'xxxxxx'
         }
     }
 

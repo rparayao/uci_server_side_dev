@@ -24,6 +24,7 @@
   "devDependencies": {},
   "scripts": {
     "make-db": "dropdb book-list; createdb book-list",
+    "make-db2": "dropdb -U postgres book-list; createdb -U postgres book-list",
     "seed": "knex seed:run --specific=graphql.js",
     "reset-db": "npm run make-db; npm run migrate; npm run seed",
     "start": "node -r esm ./src/index.js",
