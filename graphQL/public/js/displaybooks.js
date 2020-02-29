@@ -87,6 +87,18 @@ const addABook = async e => {
 	const author = $("#input-author").val();
     const sales = $("#input-sales").val();
     console.log(title + ":" + author + ":" + sales);
+
+    const query = `mutation{ createBook(input: {title: "${title}", author: "${author}", sales: ${sales}}){title}} `;
+    const variables = {};
+    const response = await fetch('/api/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query, variables }),
+    });
+    const item = await response.json();
+    console.log(JSON.stringify(item));
+    //{"query":"mutation {\n  createBook(input: {title: \"aaa\", author: \"bbbb\", sales: 1222}) {\n    title\n  }\n}\n","variables":null}
+    //{"query":"mutation{ createBook(input: {title: eeee, author: eeww, sales: 123}){title}} ","variables":{}}
 	// const response = await fetch('/api/read/' + label);
 	// const item = await response.json();
 	// if (item !== undefined){
