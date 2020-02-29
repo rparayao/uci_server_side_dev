@@ -21,3 +21,12 @@ npm run rollback --to rollback DB
 npm run test --run unit test
 
 npm run db-test --dropdb, createdb, migrate db, seed db and rn test
+
+**Week 5-graphQL**
+
+Steps to test
+- npm run make-db
+- npm run migrate
+- npm run seed
+  - localhost:4000 
+  - localhost:4000/api for graphiQL
