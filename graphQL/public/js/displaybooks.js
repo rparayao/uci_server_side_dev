@@ -32,6 +32,8 @@ const getBooks = `{
  * on load
  */
 $(document).ready(function(){
+    $("#addButton").on("click",addABook);
+
     const query = `{ getBooks ${getBooks} }`;
     loadInitialData(query);
 });
@@ -74,6 +76,24 @@ const deleteBook = async (books, id)=>{
         }
     }
 } 
+
+{/* <label>Title: </label> <input id="input-title"/> 
+<label>Author: </label> <input id="input-author"/> 
+<label>Sales: </label> <input id="input-sales"/>  */}
+
+const addABook = async e => {
+	e.preventDefault();
+	const title = $("#input-title").val();
+	const author = $("#input-author").val();
+    const sales = $("#input-sales").val();
+    console.log(title + ":" + author + ":" + sales);
+	// const response = await fetch('/api/read/' + label);
+	// const item = await response.json();
+	// if (item !== undefined){
+	// 	alert("Found: " + JSON.stringify(item));
+	// }
+}
+
 //AJAX
 
 
@@ -104,29 +124,28 @@ const createBookItem=(book)=>{
     bookItem.append(bookLabel);
 
     //approx sales
-    let dueDateDiv = $("<div>");
-    dueDateDiv.attr({"id": "approx-sales"});
-    let dueDate = $("<input>");
-    dueDate.attr({"id":"approx-sales" + book.id, "type":"text", "size":"16"});
-    dueDateDiv.append("Approximate Sales: ");   
-    dueDateDiv.append(dueDate);
+    let salesDiv = $("<div>");
+    salesDiv.attr({"id": "approx-sales"});
+    let salesInput = $("<input>");
+    salesInput.attr({"id":"approx-sales" + book.id, "type":"text", "size":"16"});
+    salesDiv.append("Approximate Sales: ");   
+    salesDiv.append(salesInput);
     //approx sales
         
     let billSublabel1 = $("<div>");
     let billSublabel2 = $("<div>");
-    billSublabel2.attr({"class": "bill-category"});
+    billSublabel2.attr({"class": "book-category"});
     billSublabel1.append(book.title);
     billSublabel2.append(book.author);
         
     bookLabel.append(billSublabel1);
     bookLabel.append(billSublabel2);
-    bookLabel.append(dueDateDiv);
+    bookLabel.append(salesDiv);
         
     let billAmount = $("<div>");
     billAmount.attr({"class":"bill-amount"});
     bookItem.append(billAmount);
         
-
 
     //create delete button
     let delButton = $("<button>");
@@ -141,7 +160,7 @@ const createBookItem=(book)=>{
     delButton.append(image);
     billAmount.append(delButton);
 
-    $("#div-bill-item").append(bookItem);
+    $("#div-book-item").append(bookItem);
     
 
     $(`#delete${book.id}`).on('click', function (){    
