@@ -8,11 +8,39 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Budget Tracker</title>
-		<link href="css/index.css" rel="stylesheet">
-		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">		
+		<link
+			rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+			integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+			crossorigin="anonymous"
+	  	/>		
+		<link 
+			rel="stylesheet" 
+			href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css"
+		/>		
+		<link 
+			href="css/index.css" 
+			rel="stylesheet"
+		/>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+		<script
+			src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+			integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+			crossorigin="anonymous"
+	  	></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+			integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+			crossorigin="anonymous"
+		></script>  
+		<script
+  			src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+  			integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+  			crossorigin="anonymous"
+		></script>
 		<script src="js/displaybills.js" type="text/javascript"></script>
+		<script src="js/userlogin.js" type="text/javascript"></script>
 	</head>
 	<body>
 		<main>
@@ -20,8 +48,154 @@
 				<div class="headContainer">
 					<img src="images/header.svg">
 				</div>
+				<div id="loginBox">
+					<a href="#" data-toggle="modal" data-target="#signup-dialog">Sign-up</a>
+					or
+					<a href="#" data-toggle="modal" data-target="#login-dialog">Login</a>
+					<br />
+					(or
+					<a href="#" data-toggle="modal" data-target="#reset-dialog"
+					  >reset password</a>)
+				  </div>
+				  <div id="logoutBox" style="display:none">
+					<a href="#" id="logout">Logout</a>
+				  </div>
+				
 			</div>
+			<div class="modal" tabindex="-1" role="dialog" id="signup-dialog">
+				<form id="signup-form">
+				  <div class="modal-dialog" role="document">
+					<div class="modal-content">
+					  <div class="modal-header">
+						<h5 class="modal-title">Sign-Up</h5>
+						<button
+						  type="button"
+						  class="close"
+						  data-dismiss="modal"
+						  aria-label="Close"
+						>
+						  <span aria-hidden="true">&times;</span>
+						</button>
+					  </div>
+					  <div class="modal-body">
+						<div>
+						  <label>Name: <input id="display_name"/></label>
+						</div>
+						<div>
+						  <label>Email Address: <input id="email_address"/></label>
+						</div>
+						<div>
+						  <label>Username: <input id="signup-username"/></label>
+						</div>
+						<div>
+						  <label
+							>Password: <input id="signup-password" type="password"
+						  /></label>
+						</div>
+						<div>
+						  (If this was a real app you'd have a second password input here, and
+						  use Javascript to ensure they matched before letting this form
+						  through)
+						</div>
+					  </div>
+					  <div id="signup-failure">
+						I'm sorry, something went wrong.
+					  </div>
+					  <div class="modal-footer">
+						<button class="btn btn-secondary" data-dismiss="modal">
+						  Cancel
+						</button>
+						<input type="submit" class="btn btn-primary" value="Sign-Up" />
+					  </div>
+					</div>
+				  </div>
+				</form>
+			  </div>
+			  
 
+			<div class="modal" tabindex="-1" role="dialog" id="login-dialog">
+				<div class="modal-dialog" role="document">
+				  <div class="modal-content">
+					<div class="modal-header">
+					  <h5 class="modal-title">Login</h5>
+					  <button
+						type="button"
+						class="close"
+						data-dismiss="modal"
+						aria-label="Close"
+					  >
+						<span aria-hidden="true">&times;</span>
+					  </button>
+					</div>
+					<form id="login-form">
+					  <div class="modal-body">
+						<div>
+						  <label>Username: <input id="login-username"/></label>
+						</div>
+						<div>
+						  <label
+							>Password: <input id="login-password" type="password"
+						  /></label>
+						</div>
+					  </div>
+					  <div id="login-failure">
+						I'm sorry, something about your username and/or password didn't match.
+					  </div>
+					  <div class="modal-footer">
+						<button class="btn btn-secondary" data-dismiss="modal">
+						  Cancel
+						</button>
+						<button id="request-reset" class="btn btn-secondary">
+						  Request Password Reset
+						</button>
+						<input type="submit" class="btn btn-primary" value="Login" />
+					  </div>
+					</form>
+				  </div>
+				</div>
+			  </div>
+			  <div class="modal" tabindex="-1" role="dialog" id="reset-dialog">
+				<div class="modal-dialog" role="document">
+				  <div class="modal-content">
+					<div class="modal-header">
+					  <h5 class="modal-title">Reset Password</h5>
+					  <button
+						type="button"
+						class="close"
+						data-dismiss="modal"
+						aria-label="Close"
+					  >
+						<span aria-hidden="true">&times;</span>
+					  </button>
+					</div>
+					<form id="reset-form">
+					  <div class="modal-body">
+						<div>
+						  <label>Username: <input id="reset-username"/></label>
+						</div>
+						<div>
+						  <label>Email Code: <input id="key"/></label>
+						</div>
+						<div>
+						  <label
+							>New Password: <input id="reset-password" type="password"
+						  /></label>
+						</div>
+					  </div>
+					  <div id="reset-failure">
+						I'm sorry, there was an error resetting your password
+					  </div>
+					  <div class="modal-footer">
+						<button class="btn btn-secondary" data-dismiss="modal">
+						  Cancel
+						</button>
+						<input type="submit" class="btn btn-primary" value="Reset Password" />
+					  </div>
+					</form>
+				  </div>
+				</div>
+			  </div>
+			  
 			<div id="budget-tracking">
 				<div class="monthly">
 					<div class="monthly-total">
@@ -46,13 +220,6 @@
 					<label>Amount: &#36;</label>
 					<input id="input-amount" name="amount" value="0" title="Enter amount"/>					
 					<input id="createButton" type="submit" value="Create Bill" title="Create a bill item"/>
-				</form>
-			</div>
-
-			<div class="find-bill">
-				<form>
-					<label>Find</label> <input id="input-find"/> 
-					<input id="findButton" type="submit" value="Find Item" title="Find bill item"/>
 				</form>
 			</div>
 

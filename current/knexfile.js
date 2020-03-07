@@ -1,14 +1,14 @@
 module.exports  = {
-    development_test: {
+    development: {
         client: 'mysql',
         connection: {
             host: 'localhost',
-            database: 'budget_tracker',
+            database: 'monthly-bills',
             user: 'root',
             password: ''
         }
     },
-    development: {
+    development_xx: {
         client: 'postgresql',
         connection: {
             database: 'monthly-bills',
@@ -17,7 +17,7 @@ module.exports  = {
         }
     },
     test: {
-        client: 'postgresql',
+        client_xx: 'postgresql',
         connection: {
             database: 'monthly-bills-test',
             user: 'postgres',

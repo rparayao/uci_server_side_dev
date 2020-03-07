@@ -5,6 +5,7 @@
  * 01/31/2020
  */
 
+
 let initbills = new Array();
 
 let monthlyBudget = 2000.0
@@ -28,16 +29,21 @@ Bill.prototype.getId = () =>{
 //class for bill item
 
 
-
-
+  
+const getBills = `{
+    id
+    label
+    category
+    amount
+  }`;
 /**
  * on load
  */
 $(document).ready(function(){
 	$("#createButton").on("click",submitHandler);
-	$("#findButton").on("click",findHandler);
 
-	loadInitialData();
+    const query = `{ getBills ${getBills} }`;
+	loadInitialData(query);
 
 	const startingAmt = $("#input-start-amt");
 	startingAmt.on('blur', function (){    
@@ -50,7 +56,14 @@ $(document).ready(function(){
 	$("#input-amt-left").val(calculateLeft(monthlyBudget, initbills));		
 	
 	//add jquery ui here
-	$(document).tooltip();
+	// $(document).tooltip();
+
+	$('#login-form').on('click', login);
+	$('#logout').on('click', logout);
+	$('#signup-form').on('submit', signup);
+	$('#request-reset').on('click', requestReset);
+	$('#reset-form').on('submit', resetPassword);
+  
 });
 
 
@@ -84,6 +97,7 @@ const calculateCurrent =(bills)=>{
 
 
 //AJAX
+//TODO
 const updateBill =  async (bills, item, amount2)=>{
 	const idx = bills.findIndex(bill => `amount${bill.id}`===item);
 
@@ -96,29 +110,22 @@ const updateBill =  async (bills, item, amount2)=>{
 	showAmountLeft();
 	bills[id].amount = amount;
 }
+//TODO
 
-
-const loadInitialData = async () =>{
-	const response = await fetch('/api/read');
-	const item = await response.json();
-	$.each(item, function(i, data){
-		initbills = [...initbills, new Bill(data.id, data.label, data.amount, data.category)]
-	})
-	createListOfBills(initbills);
-	return 1;
+const loadInitialData = async (query, variables = {}) =>{
+    const response = await fetch('/api/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query, variables }),
+    });
+    const item = await response.json();
+    $.each(item.data.getBills, function(i, data){
+        initbills = [...initbills, new Bill(data.id, data.label, data.amount, data.category)]
+    })
+    createListOfBills(initbills);
+    return 1;
 } 
 
-
-
-const findHandler = async e => {
-	e.preventDefault();
-	const label = $("#input-find").val();
-	const response = await fetch('/api/read/' + label);
-	const item = await response.json();
-	if (item !== undefined){
-		alert("Found: " + JSON.stringify(item));
-	}
-}
 
 
 const submitHandler = async e => {
@@ -128,30 +135,42 @@ const submitHandler = async e => {
 	const category = $("#input-cat").val(); 
 	const amount = Number.parseFloat($("#input-amount").val());
 
-	const response = await fetch('/api/create/' + label + "/" + category + "/" + amount);
-	const item = await response.json();
-	createBillItem(item);
-	initbills.push(item);
+	const query = `mutation{ createBill(input: {label: "${label}", category: "${category}", amount: ${amount}}){id label category amount}} `;
+    const variables = {};
+    const response = await fetch('/api/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query, variables }),
+    });
+    const {data: {createBill}} = await response.json();
+    console.log(JSON.stringify(createBill));
+	createBillItem(createBill);
+	initbills.push(createBill);
 	showAmountLeft();	
-  };
-
+}
 
 
 const deleteBill = async (bills, id)=>{
-	const response = await fetch('/api/delete/' + id);
-	const item = await response.json();
-	//remove from display
-	if (item !== undefined){
-		const index = bills.findIndex(bill => bill.id === id);
-		bills.splice(index,1);
+    const query = `mutation{ deleteBill(id: ${id}){successful}} `;
+    const variables = {};
+    const response = await fetch('/api/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query, variables }),
+    });
+    const item = await response.json();
+    //remove from display
+    if (item !== undefined){
+        const index = bills.findIndex(bill => bill.id === id);
+        bills.splice(index,1);
 
-		let billDelete = $(`#bill-item${id}`);
-		if (billDelete){
-			billDelete[0].parentNode.removeChild(billDelete[0])	
-		}
-		showAmountLeft();
-	}
+        let billDeleted = $(`#bill-item${id}`);
+        if (billDeleted){
+            billDeleted[0].parentNode.removeChild(billDeleted[0]) 
+        }
+    }
 } 
+
 //AJAX
 
 
@@ -214,6 +233,7 @@ const createBillItem=(bill)=>{
 	billSublabel1.append(bill.label);
 	billSublabel2.append(bill.category);
 		
+	
 	billLabel.append(billSublabel1);
 	billLabel.append(billSublabel2);
 	billLabel.append(dueDateDiv);
@@ -270,7 +290,7 @@ const createBillItem=(bill)=>{
 	});
 
 	$("#dueDate" + bill.id).val(date.toLocaleDateString("en-US"));
-	$("#dueDate" + bill.id).datepicker({ minDate: +30, defaultDate: date, dateFormat: 'm/d/yy' });
+	// $("#dueDate" + bill.id).datepicker({ minDate: +30, defaultDate: date, dateFormat: 'm/d/yy' });
 }
 
 /**

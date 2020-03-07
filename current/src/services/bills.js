@@ -9,14 +9,22 @@ import knex from '../database'
 
 
 let initData = [];
-function getMaxIndex(){
-    if ( initData.length === 0){
+function getMaxIndex(billList){
+    if ( billList.length === 0){
         return 0;
     } else {
-        return initData.reduce((max, b) => Math.max(max, b.id), initData[0].id);
+        return billList.reduce((max, b) => Math.max(max, b.id), billList[0].id);
     }
 }
 
+function getMaxIndexxx(bookList){
+    console.log("data: " + bookList);
+    if ( bookList.length === 0){
+        return 0;
+    } else {
+        return bookList.reduce((max, b) => Math.max(max, b.id), bookList[0].id);
+    }
+}
 
 //FOR EXPORT
 export const updateBillItem = (id, label, category, amount) =>{
@@ -67,16 +75,37 @@ export const deleteBillItem = async idx =>{
 }
 
 
-//update array with newly created bill item
-export const addBillItem = async (id, label, category, amount) =>{
-    //const id = getMaxIndex() + 1;
-    if (label && category && amount){
-        let newBill = {label, category, amount};
-        let owner_id = 1;
-        let cat_id = 1;
 
-        let data = await knex('bill_items').insert({id, owner_id, cat_id, label, amount}).returning('id');
-        return data;
-    }
+
+export const addBillItem = async (input) =>{
+    console.log("1About to add...", JSON.stringify(input));
+    const table = knex.select().from('bill_items');
+    const billList = await table;
+    console.log("1About to add...", JSON.stringify(billList));
+
+    const id = getMaxIndex(billList) + 1;
+
+    //let id = parseFloat(totalCount[0]['count']) + 1;
+    let label = input.label;
+    let category = input.category;
+    let amount = input.amount;
+    let bill = {id, label, category, amount};
+    console.log("id...", id);
+
+    console.log("2About to add...", JSON.stringify(bill));
+
+    let data = await knex('bill_items').insert(bill).return(bill);
+    return data;
 }
+
+//update array with newly created bill item
+// export const addBillItemxx = async (id, label, category, amount) =>{
+//     const id = getMaxIndex(bookList) + 1;
+
+//     if (label && category && amount){
+
+//         let data = await knex('bill_items').insert({id, label, category, amount}).returning('id');
+//         return data;
+//     }
+// }
 //FOR EXPORT
