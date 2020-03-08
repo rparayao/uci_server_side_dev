@@ -94,7 +94,7 @@ const logout = async e => {
 	setCurrentUser(null);
   }
   
-  const signup = async e => {
+const signup = async e => {
 	e.preventDefault();
 
 	const user = {

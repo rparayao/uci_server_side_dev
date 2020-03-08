@@ -32,7 +32,7 @@
     "knex": "node -r esm node_modules/.bin/knex",
     "make-db": "dropdb monthly-bills; createdb monthly-bills",
     "seed": "knex seed:run --specific=monthly.js",
-    "seed-test": "NODE_ENV=test knex seed:run --specific=monthly-bills",
+    "seed-test": "NODE_ENV=test knex seed:run --specific=monthly.js",
     "test": "NODE_ENV=test mocha --exit -r esm test/index.js",
     "db-test": "npm run reset-test-db; npm run test",
     "reset-db": "npm run make-db; npm run migrate; npm run seed",
