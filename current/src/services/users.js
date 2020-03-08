@@ -2,10 +2,11 @@ import knex from '../database'
 import { hashPassword } from '../auth'
 
 export const getUserByUsername = async username =>
-  (await knex('users').select().where({ username }))[0];
+  (await knex('user_accounts').select().where({ username }))[0];
 
-export const createUser = async ({ username, email, displayName, password }) => {
-  const [user] = await knex('users').insert({
+export const createUser = async ({ id, username, email, displayName, password }) => {
+  const [user] = await knex('user_accounts').insert({
+    id,
     username,
     email,
     display_name: displayName,
@@ -36,7 +37,7 @@ export const getPasswordResetKey = async ({ id }) => {
 };
 
 export const changePassword = async (id, password) =>
-  knex('users')
+  knex('user_accounts')
     .update({ password: await hashPassword(password) })
     .where({ id });
 

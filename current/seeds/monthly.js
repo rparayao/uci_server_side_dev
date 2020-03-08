@@ -8,8 +8,8 @@ exports.seed = async knex => {
 
     await knex('user_accounts').del();
     await knex('user_accounts').insert([
-      { id: 101, display_name: 'Mickey Mouse', username: 'mmouse', email: 'mmouse@disney.com' }, 
-      { id: 102, display_name: 'Donald Duck', username: 'dduck', email: 'dduck@disney.com' }, 
+      { display_name: 'Mickey Mouse', username: 'mmouse', email: 'mmouse@disney.com' }, 
+      {  display_name: 'Donald Duck', username: 'dduck', email: 'dduck@disney.com' }, 
     ]);
 
   };

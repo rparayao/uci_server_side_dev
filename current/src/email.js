@@ -7,14 +7,13 @@ const generatePasswordResetKey = async () =>
 const transport = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'fake-jokes-admin-address@gmail.com', pass: 'fake-gmail-password'
+    user: 'rparayao@gmail.com', pass: 'xxxxx@goo'
   }
 });
 
 const generatePasswordResetMessage = (display_name, key) => `
 Hello ${display_name},
-Someone requested that your password to the jokes site be reset.  If that was you, please visit our password reset page at www.example.com/reset and provide the following token: "${key}".  Otherwise, please disregard this email.
-The Jokes Site
+Someone requested that your password to the jokes site be reset.
 `;
 
 export const sendResetEmail =
@@ -23,17 +22,17 @@ export const sendResetEmail =
     // Since this is just an example (and I don't want to commit my gmail
     // password) this version will just log the email details instead
     console.log('"Sending" an email', {
-      from: 'fake-jokes-admin-address@gmail.com',
+      from: 'rparayao@gmail.com',
       to: email,
-      subject: 'Password Reset for Jokes Site',
+      subject: 'Password Reset ',
       text: generatePasswordResetMessage(display_name, key)
     });
-    // await transport.sendMail({
-    //   from: 'fake-jokes-admin-address@gmail.com',
-    //   to: email,
-    //   subject: 'Password Reset for Jokes Site',
-    //   text: generatePasswordResetMessage(display_name, key)
-    // });
+    await transport.sendMail({
+       from: 'rparayao@gmail.com',
+       to: email,
+       subject: 'Password Reset ',
+       text: generatePasswordResetMessage(display_name, key)
+     });
     return key;
   };
 

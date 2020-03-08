@@ -1,5 +1,10 @@
 import { getBillItem, deleteBillItem, addBillItem } from '../services/bills'
-
+import { sendResetEmail } from '../email'
+import { compareHashed } from '../auth';
+import {
+    createUser,
+    getUserByUsername
+  } from '../services/users';
 
 const convertUserFromDatabase = user => {
     user.displayName = user.display_name;
@@ -36,19 +41,9 @@ const resolvers = {
 
     logout: async (args, { session }) => {
        delete session.user
-       return { wasSuccessful: true };
+       return { successful: true };
     },
-    resetPassword: async ({ resetInput: { username, password, key } },
-        { session }) => {
-        const user = await getUserByUsername(username);
-        const actualKey = await getPasswordResetKey(user);
-        if (key !== actualKey) throw new Error('Invalid password reset key');
-    
-        await changePassword(user.id, password);
-        await deleteResets(user);
-        session.user = convertUserFromDatabase(user);
-        return session.user;
-      },
+
     signup: async ({ user }, { session }) => {
         session.user = convertUserFromDatabase(await createUser(user));
         return session.user;

@@ -58,12 +58,9 @@ $(document).ready(function(){
 	//add jquery ui here
 	// $(document).tooltip();
 
-	$('#login-form').on('click', login);
+	$('#login-formxx').on('submit', login);
 	$('#logout').on('click', logout);
-	$('#signup-form').on('submit', signup);
-	$('#request-reset').on('click', requestReset);
-	$('#reset-form').on('submit', resetPassword);
-  
+	$('#signup-form').on('submit', signup);  
 });
 
 

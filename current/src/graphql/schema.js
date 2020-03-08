@@ -8,7 +8,7 @@ export default buildSchema(`
     id: ID!
     label: String!
     category: String!
-    amount: Int
+    amount: Float
   }
 
   type ActionResponse {
@@ -19,7 +19,7 @@ export default buildSchema(`
   input BillInput {
     label: String!
     category: String!
-    amount: Int!
+    amount: Float!
   }
 
   
@@ -42,11 +42,6 @@ export default buildSchema(`
     username: String!
   }
 
-  input PasswordResetInput {
-    username: String!
-    password: String!
-    key: String!
-  }
 
 
   type Query {   
@@ -58,9 +53,7 @@ export default buildSchema(`
     deleteBill(id: ID!): ActionResponse
     createBill(input: BillInput!): Bill
     login(loginInput: LoginInput!): User
-    logout: SuccessResponse
-    requestPasswordReset(username: String!): SuccessResponse
-    resetPassword(resetInput: PasswordResetInput!): User
+    logout: ActionResponse
     signup(user: UserInput!): User
   }
 

@@ -1,7 +1,8 @@
 exports.up = async knex =>{
     await knex.schema.dropTableIfExists('user_accounts');
     await knex.schema.createTable('user_accounts', table => {
-        table.integer('id').primary();
+        //table.integer('id').primary();
+        table.increments();
         table.string('display_name', 100).unique().notNullable();
         table.string('username', 25).unique().notNullable();
     });
@@ -11,11 +12,11 @@ exports.up = async knex =>{
         table.integer('id').primary();
         table.string('label', 100).notNullable();
         table.string('category', 36).notNullable();
-        table.boolean('amount').notNullable();
+        table.float('amount').notNullable();
         table.integer('owner_id', 100);
     });
 };
 
 exports.down = async knex => {
-
+    await knex.schema.dropTable('user_accounts');
 };

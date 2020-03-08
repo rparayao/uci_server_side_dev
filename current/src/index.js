@@ -9,11 +9,15 @@ import express from 'express';
 import expressgraphql from 'express-graphql';
 import schema from './graphql/schema';
 import resolvers from './graphql/resolvers';
-
+import session from 'express-session';
+import ConnectSessionKnex from 'connect-session-knex';
+import knex from './database'
 
 const app = express();
 const staticRoute = express.static('public');
 app.use('/', staticRoute);
+
+const env = process.env.NODE_ENV || 'development';
 
 // Global Error Handler
 if (!['development', 'test'].includes(env)) {
