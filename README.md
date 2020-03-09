@@ -30,3 +30,16 @@ Steps to test
 - npm run seed
   - localhost:4000 
   - localhost:4000/api for graphiQL
+
+
+**Week 7-Sessions and Users**
+Steps to test
+- npm run make-db
+- npm run migrate
+- npm run seed
+  - localhost:4000 
+  - localhost:4000/api for graphiQL
+- from UI point browser to http://localhost:4000/
+  - Sign-up and Login link is available on main page
+  - user name is displayed on main page
+  - logout link is available on main page
