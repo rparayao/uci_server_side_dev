@@ -34,7 +34,11 @@ Steps to test
 
 **Week 7-Sessions and Users**
 Steps to test
+- dropdb monthly-bills [-U postgres]
+- createdb monthly-bills [-U postgres]
+- OR
 - npm run make-db
+
 - npm run migrate
 - npm run seed
   - localhost:4000 

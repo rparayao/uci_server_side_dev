@@ -1,32 +1,17 @@
 
 CREATE TABLE user_accounts (
-  id integer PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   display_name varchar(100) NOT NULL,
-  account_name varchar(25) UNIQUE NOT NULL,
-  account_active Boolean
+  username varchar(25) UNIQUE NOT NULL
 );
 
-CREATE TABLE bill_category(
-	id integer PRIMARY KEY,
-	label text,
-	type varchar(36) NOT NULL
-);
 
 CREATE TABLE bill_items(
-	id integer PRIMARY KEY,
-	owner_id integer,
-	cat_id integer,
+	id SERIAL PRIMARY KEY,
 	label text,
+	category varchar(25),
 	amount real not NULL,
-	duedate timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
-
-CREATE TABLE monthly(
-	id integer PRIMARY KEY,
-	label text,
-	category text,
-	amount real not NULL
+	owner_id integer
 );
 
 
