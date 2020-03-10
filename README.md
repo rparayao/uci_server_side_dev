@@ -36,6 +36,7 @@ Steps to test
 Steps to test
 - dropdb monthly-bills [-U postgres]
 - createdb monthly-bills [-U postgres]
+- psql [-U postgres] -d monthly-bills -f sql/schema.sql 
 - OR
 - npm run make-db
 
