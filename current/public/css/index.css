@@ -2,6 +2,7 @@
 	margin: 0 auto;
 	width: max-content;
 	min-height: 500px;
+	min-width: 620px;
 	position: relative;
 }
 
@@ -99,6 +100,11 @@
    background: #e1e1e1;
    background:white;
 }
+
+.categoryIcon {
+    padding-top: 15px; 
+}
+
 
 .bill-label {
 	display: flex; 

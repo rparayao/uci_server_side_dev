@@ -296,6 +296,3 @@ const createBillItem=(bill)=>{
 const showAmountLeft=()=>{
 	$("#input-amt-left").val(calculateLeft(monthlyBudget, initbills));
 }
-
-
-

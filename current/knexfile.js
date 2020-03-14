@@ -1,5 +1,5 @@
 module.exports  = {
-    development__: {
+    development: {
         client: 'mysql',
         connection: {
             host: 'localhost',
@@ -8,7 +8,7 @@ module.exports  = {
             password: ''
         }
     },
-    development: {
+    development_XXXX: {
         client: 'postgresql',
         connection: {
             database: 'monthly-bills',
@@ -16,7 +16,7 @@ module.exports  = {
             password: 'xxxx'
         }
     },
-    test: {
+    test_xxxx: {
         client: 'postgresql',
         connection: {
             database: 'monthly-bills-test',

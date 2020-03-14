@@ -139,8 +139,17 @@
 			  </div>
 			  </div>
 			  
-			<div id="budget-tracking">
-<!--
+			<div id="budget-tracking">				
+				<div class="monthly">
+				<div class="monthly-total">
+					<div id='monthly-amount'><label>&#36;&nbsp;</label><input id='input-start-amt' value=2000 title="Starting amount for this month"></div>	         
+						<div>Monthly Total</div>
+					</div>
+				<div class="monthly-left">
+					<div id='left-amount'><label>&#36;&nbsp;</label><input id='input-amt-left' value=1590 readonly title="Remaining amount left for this month"/></div>	         
+					<div>Remaining</div>
+				</div>
+			</div>
 			<div class="add-bill">
 				<form>
 					<label>Label</label> <input id="input-label" value="New Bill" title="Enter label for bill item"/> <label>Category:
@@ -155,7 +164,7 @@
 					<input id="createButton" type="submit" value="zzCreate Bill" title="Create a bill item"/>
 				</form>
 			</div>
--->
+
 			<hr/>
 			<div id='div-bill-item'>
 					
@@ -163,9 +172,16 @@
 		</div>
 	</main>
 	</body>
-	<script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
-	<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
-	<script src="js/index.js" type="text/javascript"></script>
+
+	<script src="https://unpkg.com/react@16.7.0/umd/react.production.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/emotion@9.2.12/dist/emotion.umd.min.js"></script>
+	<script src="https://unpkg.com/react-dom@16.7.0/umd/react-dom.production.min.js"></script>
+	<script src="https://unpkg.com/prop-types@15.5.10/prop-types.min.js"></script>
+	<script src="https://unpkg.com/react-input-autosize@2.2.1/dist/react-input-autosize.min.js"></script>
+	<script src="https://unpkg.com/react-select@2.1.2/dist/react-select.min.js"></script>
+	<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>	
+
+	<script src="js/displaybills.js" type="text/javascript"></script>
 	<script src="js/userlogin.js" type="text/javascript"></script>
 
 </html>
