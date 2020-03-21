@@ -8,12 +8,14 @@ exports.up = async knex => {
       resets.string('key', 32);
       resets.timestamp('created_on').defaultsTo(knex.fn.now());
     });
-  }
+}
 
-  exports.down = async knex => {
+exports.down = async knex => {
     await knex.schema.alterTable('user_accounts', users => {
       users.dropColumn('email');
       users.dropColumn('password');
     });
     await knex.schema.dropTable('password_resets');
-  }
+}
+
+

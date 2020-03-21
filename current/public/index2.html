@@ -181,6 +181,41 @@
 	<script src="https://unpkg.com/react-select@2.1.2/dist/react-select.min.js"></script>
 	<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>	
 
+	<div id="root"></div>
+	<script type="text/babel">
+	const options = [
+	{ value: 'chocolate', label: 'Chocolate' },
+	{ value: 'strawberry', label: 'Strawberry' },
+	{ value: 'vanilla', label: 'Vanilla' }
+  ];
+
+  class App extends React.Component {
+	state = {
+	  selectedOption: null,
+	}
+	handleChange = (selectedOption) => {
+	  this.setState({ selectedOption });
+	  console.log(`Option selected:`, selectedOption);
+	}
+	render() {
+	  const { selectedOption } = this.state;
+
+	  return (
+		<div>
+		Test Text
+		<Select.Async
+		  value={selectedOption}
+		  onChange={this.handleChange}
+		  options={options}
+		/>
+		</div>
+	  );
+	}
+  }
+
+  ReactDOM.render(<App/>, document.querySelector("#root"))
+  </script>
+
 	<script src="js/displaybills.js" type="text/javascript"></script>
 	<script src="js/userlogin.js" type="text/javascript"></script>
 

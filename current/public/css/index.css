@@ -150,6 +150,13 @@
  	width: 120px;
  }
 
+#select{
+	width: 160px;
+}
+ 
+#amount-label{
+	padding-left: 60px;
+}
 
 body{
 	background-color:#D4E0FF;

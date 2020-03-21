@@ -4,25 +4,15 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 var bills = [];
-//  [{id: 0, label: "American Express", amount: 250.0, category: "Credit Card",}, 
-//     {id: 1, label: "Car Payment", amount:200.00, category: "Transportation",}, 
-//     {id: 2, label: "Rail pass", amount:200.00, category: "Transportation",}, 
-//     {id: 3, label: "Phone", amount: 125.00, category: "Utilities",}, 
-//     {id: 4, label: "Electric", amount: 80.0, category: "Utilities",},
-//     {id: 5, label: "Water", amount: 30.0, category: "Utilities",},
-//     {id: 6, label: "Gas", amount: 30.0, category: "Utilities",},
-//     {id: 7, label: "Visa Card", amount: 180.0, category: "Credit Card",},];
-
-
 var monthlyBudget = 2000.0;
 
 var getMaxIndex = function getMaxIndex() {
@@ -39,8 +29,8 @@ var updateBalance = function updateBalance(bills, monthly) {
     return left;
 };
 
-function refreshDisplay(id, showItem, newBills) {
-    this.setState({ billId: id, showItem: showItem, refresh: true, statebills: newBills });
+function refreshDisplay(id, showItem, bill) {
+    this.setState({ billId: id, showItem: showItem, refresh: true, bill: bill });
 }
 
 function updateRemainingAmount(event) {
@@ -67,15 +57,11 @@ var deleteBill = function deleteBill(event) {
 
 var handleCreateBill = function handleCreateBill(e) {
     var label = e.parentNode.childNodes[1].value;
-    var category = e.parentNode.childNodes[3].value;
-    var amount = 0.0;
-    var index = getMaxIndex() + 1;
+    var category = e.parentNode.childNodes[3].innerText;
+    var amount = e.parentNode.childNodes[5].value;
+    var newBill = { label: label, category: category, amount: amount };
 
-    var newBill = { index: index, label: label, category: category, amount: amount };
-
-    var newBills = [].concat(_toConsumableArray(bills), [newBill]);
-    bills = newBills;
-    refreshDisplay(-1, true, bills);
+    refreshDisplay(-1, false, newBill);
 };
 
 var BillSummary = function (_React$Component) {
@@ -155,10 +141,13 @@ var CreateNewBill = function (_React$Component2) {
 
         _this2.state = {
             label: props.label,
-            cat: props.cat
+            cat: props.cat,
+            selectedOption: null,
+            amount: props.amount
         };
         _this2.updateLabelHandler = _this2.updateLabelHandler.bind(_this2);
-        _this2.updateCatHandler = _this2.updateCatHandler.bind(_this2);
+        _this2.handleChange = _this2.handleChange.bind(_this2);
+        _this2.handleChange = _this2.handleChange.bind(_this2);
         return _this2;
     }
 
@@ -168,13 +157,24 @@ var CreateNewBill = function (_React$Component2) {
             this.setState({ label: event.target.value });
         }
     }, {
-        key: "updateCatHandler",
-        value: function updateCatHandler(event) {
-            this.setState({ cat: event.target.value });
+        key: "updateAmountHandler",
+        value: function updateAmountHandler(event) {
+            this.setState({ amount: event.target.value });
+        }
+    }, {
+        key: "handleChange",
+        value: function handleChange(cat) {
+            var _this3 = this;
+
+            this.setState({ cat: cat }, function () {
+                return console.log("Option selected:", _this3.state.selectedOption);
+            });
         }
     }, {
         key: "render",
         value: function render() {
+            var cat = this.state.cat;
+
             return React.createElement(
                 "div",
                 { className: "add-bill" },
@@ -192,13 +192,22 @@ var CreateNewBill = function (_React$Component2) {
                         null,
                         "Category: "
                     ),
-                    React.createElement("input", { id: "input-cat", value: this.state.cat, onChange: this.updateCatHandler }),
+                    React.createElement(
+                        "div",
+                        { style: { width: '120px' } },
+                        React.createElement(Select, { id: "select",
+                            style: { width: '120px' },
+                            value: cat,
+                            onChange: this.handleChange,
+                            options: options
+                        })
+                    ),
                     React.createElement(
                         "label",
-                        null,
-                        "Amount: $ "
+                        { id: "amount-label" },
+                        "Amount:"
                     ),
-                    React.createElement("input", { id: "input-amount", value: 0, onChange: this.updateCatHandler }),
+                    React.createElement("input", { id: "input-amount", value: this.state.amount, onChange: this.updateAmountHandler }),
                     React.createElement("input", { id: "createButton", type: "submit", alt: "Create a new bill item.", value: "Create Bill", onClick: function onClick(e) {
                             return handleCreateBill(e.target);
                         } })
@@ -216,14 +225,14 @@ var BillAmount = function (_React$Component3) {
     function BillAmount(props) {
         _classCallCheck(this, BillAmount);
 
-        var _this3 = _possibleConstructorReturn(this, (BillAmount.__proto__ || Object.getPrototypeOf(BillAmount)).call(this, props));
+        var _this4 = _possibleConstructorReturn(this, (BillAmount.__proto__ || Object.getPrototypeOf(BillAmount)).call(this, props));
 
-        _this3.state = {
+        _this4.state = {
             amount: props.amount,
             id: "amount" + props.id
         };
-        _this3.updateHandler = _this3.updateHandler.bind(_this3);
-        return _this3;
+        _this4.updateHandler = _this4.updateHandler.bind(_this4);
+        return _this4;
     }
 
     _createClass(BillAmount, [{
@@ -264,15 +273,17 @@ var ListItems = function (_React$Component4) {
     function ListItems(props) {
         _classCallCheck(this, ListItems);
 
-        var _this4 = _possibleConstructorReturn(this, (ListItems.__proto__ || Object.getPrototypeOf(ListItems)).call(this, props));
+        var _this5 = _possibleConstructorReturn(this, (ListItems.__proto__ || Object.getPrototypeOf(ListItems)).call(this, props));
 
-        _this4.state = {
+        _this5.state = {
             billId: -1,
             showItem: props.showItem,
-            refresh: props.refresh
+            bill: props.bill,
+            refresh: props.refresh,
+            newItem: false
         };
-        refreshDisplay = refreshDisplay.bind(_this4);
-        return _this4;
+        refreshDisplay = refreshDisplay.bind(_this5);
+        return _this5;
     }
 
     _createClass(ListItems, [{
@@ -296,31 +307,49 @@ var ListItems = function (_React$Component4) {
     }, {
         key: "componentDidUpdate",
         value: async function componentDidUpdate(prevProps, prevState, snapshot) {
-            var _this5 = this;
+            var _this6 = this;
 
-            if (!this.state.showItem && this.state.billId !== -1) {
-                var query = "mutation{ deleteBill(id: " + this.state.billId + "){successful}} ";
-                var variables = {};
-                var response = await fetch('/api/', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ query: query, variables: variables })
-                });
-
-                var _ref2 = await response.json(),
-                    _deleteBill = _ref2.data.deleteBill;
-
-                if (_deleteBill !== undefined) {
-                    var index = this.state.data.findIndex(function (bill) {
-                        return parseInt(bill.id) === parseInt(_this5.state.billId);
+            if (!this.state.showItem) {
+                if (this.state.billId !== -1) {
+                    var query = "mutation{ deleteBill(id: " + this.state.billId + "){successful}} ";
+                    var variables = {};
+                    var response = await fetch('/api/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ query: query, variables: variables })
                     });
-                    this.state.data.splice(index - 1, 1);
 
-                    var billId = "bill-item" + this.state.billId;
-                    var element = document.getElementById(billId);
-                    if (element) {
-                        element.remove();
+                    var _ref2 = await response.json(),
+                        _deleteBill = _ref2.data.deleteBill;
+
+                    if (_deleteBill !== undefined) {
+                        var index = this.state.data.findIndex(function (bill) {
+                            return parseInt(bill.id) === parseInt(_this6.state.billId);
+                        });
+                        this.state.data.splice(index - 1, 1);
+
+                        var billId = "bill-item" + this.state.billId;
+                        var element = document.getElementById(billId);
+                        if (element) {
+                            element.remove();
+                        }
                     }
+                } else {
+                    //mutation{ createBill(input: {label: "aaa", category: "bbb", amount: 123}){label}}
+                    var _query = "mutation{ createBill(input: {label: \"" + this.state.bill.label + "\", category: \"" + this.state.bill.category + "\", amount: " + this.state.bill.amount + " }){id label, category, amount}} ";
+                    var _variables = {};
+                    var _response = await fetch('/api/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ query: _query, variables: _variables })
+                    });
+
+                    var _ref3 = await _response.json(),
+                        createBill = _ref3.data.createBill;
+
+                    console.log("##aada: " + JSON.stringify(createBill));
+                    var newBill = [].concat(_toConsumableArray(this.state.data), [createBill]);
+                    this.setState({ showItem: true, data: newBill });
                 }
             }
         }
@@ -329,7 +358,8 @@ var ListItems = function (_React$Component4) {
         value: function componentWillReceiveProps(newProps) {
             this.state = {
                 billId: newProps.billId,
-                refresh: newProps.refresh
+                refresh: newProps.refresh,
+                bill: newProps.bill
             };
         }
     }, {
@@ -418,9 +448,8 @@ var BillIcon = function BillIcon(props) {
 
 var BudgetApp = function BudgetApp(props) {
     var _React$useState5 = React.useState(props.monthly),
-        _React$useState6 = _slicedToArray(_React$useState5, 2),
-        monthly = _React$useState6[0],
-        setMonthly = _React$useState6[1];
+        _React$useState6 = _slicedToArray(_React$useState5, 1),
+        monthly = _React$useState6[0];
 
     React.useEffect(function () {
         // Update the document title using the browser API
@@ -438,6 +467,12 @@ var BudgetApp = function BudgetApp(props) {
         )
     );
 };
+
+$(document).ready(function () {
+    $('#login-formxx').on('submit', login);
+    $('#logout').on('click', logout);
+    $('#signup-form').on('submit', signup);
+});
 
 var mainElement = document.getElementById("budget-tracking");
 ReactDOM.render(React.createElement(BudgetApp, { monthly: monthlyBudget }), mainElement);

@@ -12,18 +12,25 @@ import knex from '../../src/database'
 describe('Create a bill item', () => {
   let bill_item_id = 901;
   afterEach(async () => {
-    await knex('bill_items').del().where({ id: bill_item_id });
+    await knex('bill_items').del().where({ label: "MochaTest" });
   });
 
   it('can add item--HAPPY PATH', async() => {
-    const billid = await addBillItem(bill_item_id, "Test", "cat", 111);
+    const billBefore = await getBillItem();
+    await addBillItem({label: "MochaTest", category: "cat", amount: 111});
+    const billAfter = await getBillItem();
 
-    expect(billid[0]).to.equal(bill_item_id);
+    expect(billBefore.length).to.lessThan(billAfter.length);
   });
 
   it('cannot add invalid item--UNHAPPY PATH', async () => {
-    const bill = await addBillItem();
-    expect(bill).to.equal(undefined);
+    let expected = undefined;
+    try{
+      await addBillItem();
+    } catch (err){
+      expected = {};
+    }
+    expect(expected).to.not.equal(undefined);
   });
 });
 
@@ -36,7 +43,7 @@ describe('Select a bill item', () => {
 
 
   it('can select a bill item --HAPPY PATH', async () => {
-    const status = await getBillItemWithId(101);
+    const status = await getBillItemWithId(1);
     expect(status).to.be.not.empty 
   });
     
@@ -50,17 +57,27 @@ describe('Select a bill item', () => {
 
 
 describe('Delete a bill item', () => {
-  let bill_item = {id: 801, owner_id: 1, cat_id: 1, label: "Test Delete", amount: 0}
+  //await addBillItem({label: "MochaTest", category: "cat", amount: 111});
+  let bill_item_new;
   beforeEach(async () => {
-    const ids = await knex('bill_items').insert(bill_item).returning('id');
+    //const ids = await knex('bill_items').insert(bill_item).returning('id');
+    let bill_item = {label: "DEL_MochaTest", category: "cat", amount: 111}
+    bill_item_new = await addBillItem(bill_item);
+    console.log("BEFORE: " + JSON.stringify(bill_item_new));
   });
   afterEach(async () => {
-    await knex('bill_items').where({id: bill_item.id}).del();
+    //await knex('bill_items').where({id: bill_item.id}).del();
+    await knex('bill_items').del().where({ label: "DEL_MochaTest" });
   });
 
   it('can delete valid item--HAPPY PATH', async () => {
-    const status = await deleteBillItem(bill_item.id);
-    expect(await knex('bill_items').where({ id: bill_item.id })).to.be.empty 
+    const billBefore = await getBillItem();
+
+    await deleteBillItem(bill_item_new.id);
+    const billAfter = await getBillItem();
+
+    expect(billBefore.length).to.greaterThan(billAfter.length);
+    //expect(await knex('bill_items').where({ id: bill_item.id })).to.be.empty 
   });
 
 

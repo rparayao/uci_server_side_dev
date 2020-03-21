@@ -1,14 +1,4 @@
 let bills =[];
-//  [{id: 0, label: "American Express", amount: 250.0, category: "Credit Card",}, 
-//     {id: 1, label: "Car Payment", amount:200.00, category: "Transportation",}, 
-//     {id: 2, label: "Rail pass", amount:200.00, category: "Transportation",}, 
-//     {id: 3, label: "Phone", amount: 125.00, category: "Utilities",}, 
-//     {id: 4, label: "Electric", amount: 80.0, category: "Utilities",},
-//     {id: 5, label: "Water", amount: 30.0, category: "Utilities",},
-//     {id: 6, label: "Gas", amount: 30.0, category: "Utilities",},
-//     {id: 7, label: "Visa Card", amount: 180.0, category: "Credit Card",},];
-
-
 let monthlyBudget = 2000.0;
 
 
@@ -27,8 +17,8 @@ const updateBalance=(bills, monthly)=>{
 
 
 
-function refreshDisplay(id, showItem, newBills){
-    this.setState({billId: id, showItem, refresh: true, statebills: newBills});
+function refreshDisplay(id, showItem, bill){
+    this.setState({billId: id, showItem, refresh: true, bill});
 }
 
 
@@ -41,7 +31,7 @@ function updateRemainingAmount(event){
         bills[id].amount = amount;
     }
     let left = updateBalance(bills, monthlyBudget);     
-    this.setState({remainingAmt: left,});
+    this.setState({remainingAmt: left});
 }
 
 
@@ -57,20 +47,12 @@ const deleteBill=(event)=>{
 
 const handleCreateBill = (e) =>{
     const label = e.parentNode.childNodes[1].value;
-    const category = e.parentNode.childNodes[3].value; 
-    const amount = 0.0;
-    const index = getMaxIndex() + 1;
+    const category = e.parentNode.childNodes[3].innerText; 
+    const amount = e.parentNode.childNodes[5].value;
+    let newBill = {label, category, amount};
 
-    let newBill = {index, label, category, amount,};
-
-    let newBills = [...bills, newBill,];
-    bills = newBills;
-    refreshDisplay(-1, true, bills);
+    refreshDisplay(-1, false, newBill);
 };
-
-
-
-
 
 
 class BillSummary extends React.Component {
@@ -124,9 +106,12 @@ class CreateNewBill extends React.Component {
         this.state = {
             label: props.label, 
             cat: props.cat,
+            selectedOption: null,
+            amount: props.amount
         };
         this.updateLabelHandler = this.updateLabelHandler.bind(this);
-        this.updateCatHandler = this.updateCatHandler.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
  
@@ -134,21 +119,36 @@ class CreateNewBill extends React.Component {
         this.setState({label: event.target.value,});
     }
 
-    updateCatHandler(event) {
-        this.setState({cat: event.target.value,});
+    updateAmountHandler(event) {
+        this.setState({amount: event.target.value,});
     }
 
-    
+
+    handleChange (cat) {
+        this.setState(
+          { cat },
+          () => console.log(`Option selected:`, this.state.selectedOption)
+        );
+    }
+
     render() {
+        const { cat } = this.state;
         return ( 
             <div className="add-bill">
                 <div className="bill-amount">
                     <label>Label:</label>
                     <input id="input-label" value={this.state.label} onChange={this.updateLabelHandler}/>
                     <label>Category: </label>
-                    <input id="input-cat" value={this.state.cat} onChange={this.updateCatHandler}/>
-                    <label>Amount: $ </label>
-                    <input id="input-amount" value={0} onChange={this.updateCatHandler}/>
+                    <div style={{width: '120px'}}>
+                    <Select id="select"
+                    style={{width: '120px'}}
+                    value={cat}
+                    onChange={this.handleChange}
+                    options={options}
+                    />
+                    </div>
+                    <label id="amount-label">Amount:</label>
+                    <input id="input-amount" value={this.state.amount} onChange={this.updateAmountHandler}/>
                     <input id="createButton" type="submit" alt="Create a new bill item." value="Create Bill" onClick={(e) =>handleCreateBill(e.target)}/>
                 </div>
             </div>
@@ -200,7 +200,9 @@ class ListItems extends React.Component {
         this.state = {
             billId: -1, 
             showItem: props.showItem, 
+            bill: props.bill, 
             refresh: props.refresh, 
+            newItem: false
         };
         refreshDisplay = refreshDisplay.bind(this);
     }
@@ -226,25 +228,41 @@ class ListItems extends React.Component {
 
 
     async componentDidUpdate(prevProps, prevState, snapshot) {
-        if (!this.state.showItem && this.state.billId !== -1) {
-            const query = `mutation{ deleteBill(id: ${this.state.billId}){successful}} `;
-            const variables = {};
-            const response = await fetch('/api/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ query, variables }),
-            });
-            const {data: {deleteBill}} = await response.json();
-            if (deleteBill !== undefined){
-                const index = this.state.data.findIndex(bill => parseInt(bill.id) === parseInt(this.state.billId));
-                this.state.data.splice(index-1,1);
+        if (!this.state.showItem){
+            if ( this.state.billId !== -1) {
+                const query = `mutation{ deleteBill(id: ${this.state.billId}){successful}} `;
+                const variables = {};
+                const response = await fetch('/api/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query, variables }),
+                });
+                const {data: {deleteBill}} = await response.json();
+                if (deleteBill !== undefined){
+                    const index = this.state.data.findIndex(bill => parseInt(bill.id) === parseInt(this.state.billId));
+                    this.state.data.splice(index-1,1);
 
-                let billId = "bill-item" + this.state.billId;
-                let element = document.getElementById(billId);
-                if (element){
-                    element.remove();
+                    let billId = "bill-item" + this.state.billId;
+                    let element = document.getElementById(billId);
+                    if (element){
+                        element.remove();
+                    }
                 }
+            } else {
+                //mutation{ createBill(input: {label: "aaa", category: "bbb", amount: 123}){label}}
+                const query = `mutation{ createBill(input: {label: "${this.state.bill.label}", category: "${this.state.bill.category}", amount: ${this.state.bill.amount} }){id label, category, amount}} `;
+                const variables = {};
+                const response = await fetch('/api/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query, variables }),
+                });
+                const {data:{createBill}} = await response.json();
+                 console.log("##aada: " + JSON.stringify(createBill));
+                 const newBill = [...this.state.data, createBill]
+                 this.setState({showItem: true, data: newBill});
             }
+
         }
     }
 
@@ -252,6 +270,7 @@ class ListItems extends React.Component {
         this.state = {
             billId: newProps.billId, 
             refresh: newProps.refresh, 
+            bill: newProps.bill
         };
     }
 
@@ -271,7 +290,7 @@ class ListItems extends React.Component {
                 }
                 )
             );
-        }
+        } 
         return <div></div>;
     }
 }
@@ -323,7 +342,7 @@ const BillIcon=(props)=>{
 
 
 const BudgetApp=(props)=>{ 
-    const [monthly, setMonthly,] = React.useState(props.monthly);
+    const [monthly] = React.useState(props.monthly);
     React.useEffect(() => {
     // Update the document title using the browser API
         document.title = `Monthly Budget of ${props.monthly}`;
@@ -335,5 +354,13 @@ const BudgetApp=(props)=>{
     </div>);
 };
  
+
+$(document).ready(function(){
+	$('#login-formxx').on('submit', login);
+	$('#logout').on('click', logout);
+	$('#signup-form').on('submit', signup);  
+});
+
+
 const mainElement = document.getElementById("budget-tracking");
 ReactDOM.render(<BudgetApp monthly={monthlyBudget}/>, mainElement);
