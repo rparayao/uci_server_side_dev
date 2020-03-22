@@ -1,5 +1,4 @@
-import { getBillItem, deleteBillItem, addBillItem } from '../services/bills'
-import { sendResetEmail } from '../email'
+import { getBillItem, deleteBillItem, addBillItem, getPastDueBillItem } from '../services/bills'
 import { compareHashed } from '../auth';
 import {
     createUser,
@@ -16,6 +15,12 @@ const convertUserFromDatabase = user => {
 const resolvers = {
     getBills: async ({}) =>{
         return getBillItem();
+    }, 
+    getPastDue: async ({}) =>{
+        const data = await getPastDueBillItem();
+        console.log("GET::: " + JSON.stringify(data));
+        return data;
+        //return getPastDueBillItem();
     }, 
     createBill: async ({input}) =>{
         return addBillItem(input);

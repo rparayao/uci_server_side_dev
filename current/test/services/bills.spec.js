@@ -57,16 +57,13 @@ describe('Select a bill item', () => {
 
 
 describe('Delete a bill item', () => {
-  //await addBillItem({label: "MochaTest", category: "cat", amount: 111});
   let bill_item_new;
   beforeEach(async () => {
-    //const ids = await knex('bill_items').insert(bill_item).returning('id');
     let bill_item = {label: "DEL_MochaTest", category: "cat", amount: 111}
     bill_item_new = await addBillItem(bill_item);
     console.log("BEFORE: " + JSON.stringify(bill_item_new));
   });
   afterEach(async () => {
-    //await knex('bill_items').where({id: bill_item.id}).del();
     await knex('bill_items').del().where({ label: "DEL_MochaTest" });
   });
 
@@ -77,7 +74,6 @@ describe('Delete a bill item', () => {
     const billAfter = await getBillItem();
 
     expect(billBefore.length).to.greaterThan(billAfter.length);
-    //expect(await knex('bill_items').where({ id: bill_item.id })).to.be.empty 
   });
 
 

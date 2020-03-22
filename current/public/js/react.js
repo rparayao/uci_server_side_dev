@@ -193,6 +193,7 @@ class BillAmount extends React.Component {
     }
 }
 
+let pastDue = [];
 
 class ListItems extends React.Component {
     constructor(props) {
@@ -208,22 +209,41 @@ class ListItems extends React.Component {
     }
     
     async componentDidMount() {
-        const queryParams = `{
+        let queryParams = `{
             id
             label
             category
             amount
+            past_due
         }`;
         
-        const query = `{ getBills ${queryParams} }`;
+        let query = `{ getBills ${queryParams} }`;
         const variables = {};
-        const response = await fetch('/api/', {
+        let response = await fetch('/api/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ query, variables }),
         });
         const {data: {getBills}} = await response.json();
         this.setState({ data: getBills });
+
+        queryParams = `{
+            id
+            bill_id
+            amount
+        }`;
+        
+        query = `{ getPastDue ${queryParams} }`;
+        response = await fetch('/api/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query, variables }),
+        });
+        const {data: {getPastDue}} = await response.json();
+        this.setState({ pastDue: getPastDue });
+        //getPastDue.map(dueId =>{this.setState({dueId: dueId.bill_id})});
+        //getBills.map(bill)
+        console.log("AAAA: " + JSON.stringify(getPastDue))
     }
 
 
@@ -258,7 +278,6 @@ class ListItems extends React.Component {
                     body: JSON.stringify({ query, variables }),
                 });
                 const {data:{createBill}} = await response.json();
-                 console.log("##aada: " + JSON.stringify(createBill));
                  const newBill = [...this.state.data, createBill]
                  this.setState({showItem: true, data: newBill});
             }
@@ -279,11 +298,15 @@ class ListItems extends React.Component {
         if ( this.state.refresh && this.state.data !== undefined){
             return (
                 this.state.data.map((bill) => {
+                    let style = "bill-item";
+                    if ( bill.past_due !== null){
+                        style = "bill-item-due";
+                    }
                     let id = "bill-item" + bill.id;
                     return (
-                    <div className="bill-item" id={id}>
+                    <div className={style} id={id}>
                         <BillIcon cat={bill.category}/>
-                        <BillLabel label={bill.label} cat={bill.category}/>
+                        <BillLabel label={bill.label} cat={bill.category} due={bill.past_due}/>
                         <BillAmount id={bill.id} amount={bill.amount}/>
                     </div>
                     )
@@ -317,7 +340,8 @@ const BillLabel=(props)=>{
         <div className="bill-category">{category}</div>
         <div id="due-date">
             Due Date:
-            <input id="dueDate1" type="text" size="16" defaultValue={dateStr}/>
+           {props.due ?<div> PAST DUE </div>:
+            <input id="dueDate1" type="text" size="16" defaultValue={dateStr}/>}
         </div>
     </div>;
 };

@@ -44,6 +44,19 @@ export const getBillItem = () => {
     return initData ? initData : {};
 }
 
+export const getPastDueBillItem = () => {
+    const data = knex('bill_items').join('past_due', 'bill_items.id', 'past_due.bill_id' );
+    return data;
+}
+
+export const getPastDue = (owner_id) => {
+    const data = knex.select().from('past_due').where('owner_id', owner_id);
+
+    return data;
+}
+
+
+
 
 
 export const deleteBillItem = async idx =>{

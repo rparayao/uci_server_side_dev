@@ -1,7 +1,6 @@
 import { buildSchema } from 'graphql';
 
 
-
 // Construct a schema, using GraphQL schema language
 export default buildSchema(`
   type Bill {
@@ -9,12 +8,20 @@ export default buildSchema(`
     label: String!
     category: String!
     amount: Float
+    past_due: Boolean
+  }
+
+  type PastDueBill {
+    id: ID!
+    owner_id: Int!
+    days_due: Int
+    bill_id: Int
+    amount: Float
   }
 
   type ActionResponse {
     successful: Boolean!
   }
-
 
   input BillInput {
     label: String!
@@ -22,7 +29,6 @@ export default buildSchema(`
     amount: Float!
   }
 
-  
   type User {
     id: ID!
     displayName: String!
@@ -46,6 +52,7 @@ export default buildSchema(`
 
   type Query {   
     getBills: [Bill]
+    getPastDue: [PastDueBill]
     currentUser: User
   }
 

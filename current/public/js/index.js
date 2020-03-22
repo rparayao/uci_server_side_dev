@@ -267,6 +267,8 @@ var BillAmount = function (_React$Component3) {
     return BillAmount;
 }(React.Component);
 
+var pastDue = [];
+
 var ListItems = function (_React$Component4) {
     _inherits(ListItems, _React$Component4);
 
@@ -289,7 +291,7 @@ var ListItems = function (_React$Component4) {
     _createClass(ListItems, [{
         key: "componentDidMount",
         value: async function componentDidMount() {
-            var queryParams = "{\n            id\n            label\n            category\n            amount\n        }";
+            var queryParams = "{\n            id\n            label\n            category\n            amount\n            past_due\n        }";
 
             var query = "{ getBills " + queryParams + " }";
             var variables = {};
@@ -303,6 +305,23 @@ var ListItems = function (_React$Component4) {
                 getBills = _ref.data.getBills;
 
             this.setState({ data: getBills });
+
+            queryParams = "{\n            id\n            bill_id\n            amount\n        }";
+
+            query = "{ getPastDue " + queryParams + " }";
+            response = await fetch('/api/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query: query, variables: variables })
+            });
+
+            var _ref2 = await response.json(),
+                getPastDue = _ref2.data.getPastDue;
+
+            this.setState({ pastDue: getPastDue });
+            //getPastDue.map(dueId =>{this.setState({dueId: dueId.bill_id})});
+            //getBills.map(bill)
+            console.log("AAAA: " + JSON.stringify(getPastDue));
         }
     }, {
         key: "componentDidUpdate",
@@ -319,8 +338,8 @@ var ListItems = function (_React$Component4) {
                         body: JSON.stringify({ query: query, variables: variables })
                     });
 
-                    var _ref2 = await response.json(),
-                        _deleteBill = _ref2.data.deleteBill;
+                    var _ref3 = await response.json(),
+                        _deleteBill = _ref3.data.deleteBill;
 
                     if (_deleteBill !== undefined) {
                         var index = this.state.data.findIndex(function (bill) {
@@ -344,10 +363,9 @@ var ListItems = function (_React$Component4) {
                         body: JSON.stringify({ query: _query, variables: _variables })
                     });
 
-                    var _ref3 = await _response.json(),
-                        createBill = _ref3.data.createBill;
+                    var _ref4 = await _response.json(),
+                        createBill = _ref4.data.createBill;
 
-                    console.log("##aada: " + JSON.stringify(createBill));
                     var newBill = [].concat(_toConsumableArray(this.state.data), [createBill]);
                     this.setState({ showItem: true, data: newBill });
                 }
@@ -367,12 +385,16 @@ var ListItems = function (_React$Component4) {
         value: function render() {
             if (this.state.refresh && this.state.data !== undefined) {
                 return this.state.data.map(function (bill) {
+                    var style = "bill-item";
+                    if (bill.past_due !== null) {
+                        style = "bill-item-due";
+                    }
                     var id = "bill-item" + bill.id;
                     return React.createElement(
                         "div",
-                        { className: "bill-item", id: id },
+                        { className: style, id: id },
                         React.createElement(BillIcon, { cat: bill.category }),
-                        React.createElement(BillLabel, { label: bill.label, cat: bill.category }),
+                        React.createElement(BillLabel, { label: bill.label, cat: bill.category, due: bill.past_due }),
                         React.createElement(BillAmount, { id: bill.id, amount: bill.amount })
                     );
                 });
@@ -420,7 +442,11 @@ var BillLabel = function BillLabel(props) {
             "div",
             { id: "due-date" },
             "Due Date:",
-            React.createElement("input", { id: "dueDate1", type: "text", size: "16", defaultValue: dateStr })
+            props.due ? React.createElement(
+                "div",
+                null,
+                " PAST DUE "
+            ) : React.createElement("input", { id: "dueDate1", type: "text", size: "16", defaultValue: dateStr })
         )
     );
 };
