@@ -10,8 +10,8 @@ export const createUser = async ({ id, username, email, displayName, password })
     username,
     email,
     display_name: displayName,
-    password
-    // password: await hashPassword(password)
+    //password
+    password: await hashPassword(password)
   }).returning(['id', 'email', 'username', 'display_name', 'password']);
   return user;
 }

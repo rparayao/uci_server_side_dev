@@ -159,7 +159,7 @@ var CreateNewBill = function (_React$Component2) {
     }, {
         key: "updateAmountHandler",
         value: function updateAmountHandler(event) {
-            this.setState({ amount: event.target.value });
+            //this.setState({amount: event.target.value,});
         }
     }, {
         key: "handleChange",
@@ -319,9 +319,6 @@ var ListItems = function (_React$Component4) {
                 getPastDue = _ref2.data.getPastDue;
 
             this.setState({ pastDue: getPastDue });
-            //getPastDue.map(dueId =>{this.setState({dueId: dueId.bill_id})});
-            //getBills.map(bill)
-            console.log("AAAA: " + JSON.stringify(getPastDue));
         }
     }, {
         key: "componentDidUpdate",
@@ -354,7 +351,6 @@ var ListItems = function (_React$Component4) {
                         }
                     }
                 } else {
-                    //mutation{ createBill(input: {label: "aaa", category: "bbb", amount: 123}){label}}
                     var _query = "mutation{ createBill(input: {label: \"" + this.state.bill.label + "\", category: \"" + this.state.bill.category + "\", amount: " + this.state.bill.amount + " }){id label, category, amount}} ";
                     var _variables = {};
                     var _response = await fetch('/api/', {
@@ -386,7 +382,7 @@ var ListItems = function (_React$Component4) {
             if (this.state.refresh && this.state.data !== undefined) {
                 return this.state.data.map(function (bill) {
                     var style = "bill-item";
-                    if (bill.past_due !== null) {
+                    if (bill.past_due !== undefined && bill.past_due !== null) {
                         style = "bill-item-due";
                     }
                     var id = "bill-item" + bill.id;
@@ -407,7 +403,6 @@ var ListItems = function (_React$Component4) {
 }(React.Component);
 
 var DeleteBill = function DeleteBill(props) {
-    console.log("DELETE: " + JSON.stringify(props));
     return React.createElement(
         "button",
         { className: "delete-icon", id: props.id, type: "submit", height: "16", onClick: function onClick(e) {

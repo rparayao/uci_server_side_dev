@@ -120,7 +120,7 @@ class CreateNewBill extends React.Component {
     }
 
     updateAmountHandler(event) {
-        this.setState({amount: event.target.value,});
+        //this.setState({amount: event.target.value,});
     }
 
 
@@ -241,9 +241,6 @@ class ListItems extends React.Component {
         });
         const {data: {getPastDue}} = await response.json();
         this.setState({ pastDue: getPastDue });
-        //getPastDue.map(dueId =>{this.setState({dueId: dueId.bill_id})});
-        //getBills.map(bill)
-        console.log("AAAA: " + JSON.stringify(getPastDue))
     }
 
 
@@ -269,7 +266,6 @@ class ListItems extends React.Component {
                     }
                 }
             } else {
-                //mutation{ createBill(input: {label: "aaa", category: "bbb", amount: 123}){label}}
                 const query = `mutation{ createBill(input: {label: "${this.state.bill.label}", category: "${this.state.bill.category}", amount: ${this.state.bill.amount} }){id label, category, amount}} `;
                 const variables = {};
                 const response = await fetch('/api/', {
@@ -299,7 +295,7 @@ class ListItems extends React.Component {
             return (
                 this.state.data.map((bill) => {
                     let style = "bill-item";
-                    if ( bill.past_due !== null){
+                    if ( bill.past_due !== undefined && bill.past_due !== null){
                         style = "bill-item-due";
                     }
                     let id = "bill-item" + bill.id;
@@ -322,7 +318,6 @@ class ListItems extends React.Component {
 
 
 const DeleteBill=(props)=>{
-    console.log("DELETE: " + JSON.stringify(props));
     return  <button className="delete-icon" id={props.id} type="submit"  height="16" onClick={(e) =>deleteBill(e.target)}> 
         <img className="delete-icon-img" id={props.id} src="../images/trash.svg" height="16"/>
     </button>;  

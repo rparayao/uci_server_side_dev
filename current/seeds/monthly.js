@@ -1,9 +1,9 @@
 exports.seed = async knex => {
   await knex('start_amount').del();
-  await knex('user_accounts').del();
+  await knex('past_due').del();
   await knex('bill_items').del();
   await knex('bill_category').del();
-  await knex('past_due').del();
+  await knex('user_accounts').del();
 
 
   await knex('user_accounts').insert([

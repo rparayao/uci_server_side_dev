@@ -1,8 +1,8 @@
 exports.up = async knex =>{
     await knex.schema.dropTableIfExists('user_accounts');
     await knex.schema.createTable('user_accounts', table => {
-        table.integer('id').primary();
-        //table.increments('id').primary();
+        //table.integer('id').primary();
+        table.increments('id').primary();
         table.string('display_name', 100).unique().notNullable();
         table.string('username', 25).unique().notNullable();
     });
