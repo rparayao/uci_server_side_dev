@@ -17,8 +17,8 @@ const updateBalance=(bills, monthly)=>{
 
 
 
-function refreshDisplay(id, showItem, bill){
-    this.setState({billId: id, showItem, refresh: true, bill});
+function refreshDisplay(id, showItem, bill, updateBalance, left){
+    this.setState({billId: id, showItem, refresh: true, bill, updateBalance, remainingAmt: left});
 }
 
 
@@ -36,22 +36,52 @@ function updateRemainingAmount(event){
 
 
 
-const deleteBill=(event)=>{
+const deleteBill = async (event)=>{
     let choice = confirm ("Are you sure you want to delete?");
     if ( choice ){
         let billId = parseInt(event.id);
-        refreshDisplay(billId, false, bills);    
+        //REMI
+        let queryParams = `{
+            id
+            amount
+        }`;
+        
+        let query = `{ getBills ${queryParams} }`;
+        const variables = {};
+        let response = await fetch('/api/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query, variables }),
+        });
+        const {data: {getBills}} = await response.json();
+        let left = updateBalance(getBills, monthlyBudget);
+        refreshDisplay(billId, false, bills, true, left);    
     }        
 };
 
 
-const handleCreateBill = (e) =>{
+const handleCreateBill = async (e) =>{
     const label = e.parentNode.childNodes[1].value;
     const category = e.parentNode.childNodes[3].innerText; 
     const amount = e.parentNode.childNodes[5].value;
     let newBill = {label, category, amount};
 
-    refreshDisplay(-1, false, newBill);
+    let queryParams = `{
+        id
+        amount
+    }`;
+    
+    let query = `{ getBills ${queryParams} }`;
+    const variables = {};
+    let response = await fetch('/api/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query, variables }),
+    });
+    const {data: {getBills}} = await response.json();
+    let left = updateBalance(getBills, monthlyBudget);
+    refreshDisplay(-1, false, newBill, true, left);
+
 };
 
 
@@ -59,7 +89,7 @@ class BillSummary extends React.Component {
     constructor(props) {
         super(props);
         let left = updateBalance(props.bills, props.monthly);
-        this.state = {startingAmount: props.monthly, remainingAmt: left,};
+        this.state = {startingAmount: props.monthly, remainingAmt: left};
         this.startAmtHandler = this.startAmtHandler.bind(this);
         updateRemainingAmount = updateRemainingAmount.bind(this);
     }
@@ -68,10 +98,49 @@ class BillSummary extends React.Component {
     startAmtHandler(event) {
         monthlyBudget = Number(event.target.value);
         let left = updateBalance(bills, event.target.value);
-        this.setState({startingAmount: event.target.value,remainingAmt: left,});
+        this.setState({startingAmount: event.target.value,remainingAmt: left});
     }
 
-  
+    async componentDidMount() {
+        let queryParams = `{
+            id
+            amount
+        }`;
+        
+        let query = `{ getBills ${queryParams} }`;
+        const variables = {};
+        let response = await fetch('/api/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query, variables }),
+        });
+        const {data: {getBills}} = await response.json();
+        this.setState({ data: getBills });
+        let left = updateBalance(getBills, this.props.monthly);
+        this.setState({startingAmount: this.props.monthly, remainingAmt: left});
+    }
+//REMi
+    async componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.state.updateBalance){
+            let queryParams = `{
+                id
+                amount
+            }`;
+        
+            let query = `{ getBills ${queryParams} }`;
+            const variables = {};
+            let response = await fetch('/api/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query, variables }),
+            });
+            const {data: {getBills}} = await response.json();
+            let left = updateBalance(getBills, this.props.monthly);
+            this.setState({startingAmount: this.props.monthly, remainingAmt: left, updateBalance: false});
+        }
+    }
+
+
     render() {
         return (
             <div className="monthly">

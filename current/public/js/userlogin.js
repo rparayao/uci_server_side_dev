@@ -43,7 +43,7 @@ const makeQuery = async (query, variables = {}) => {
 	rootField = rootField.substr(rootField.startsWith('mutation') ? 10 : 1);
 	rootField = rootField.split('{')[0].split('(')[0].trim();
   
-	const response = await fetch('http://localhost:4000/api', {
+	const response = await fetch('/api/', {
 	  method: 'POST',
 	  headers: { 'Content-Type': 'application/json' },
 	  body: JSON.stringify({ query, variables }),

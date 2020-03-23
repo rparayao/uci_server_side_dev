@@ -11,9 +11,9 @@ exports.up = async knex => {
         table.integer('bill_id', 100);
         table.integer('days_over_due', 100);
         table.foreign('owner_id')
-        .references('user_accounts.id');
+        .references('user_accounts.id').onDelete('cascade');;
         table.foreign('bill_id')
-        .references('bill_items.id');
+        .references('bill_items.id').onDelete('cascade');;
     });
 }
 

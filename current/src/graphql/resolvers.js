@@ -26,10 +26,12 @@ const resolvers = {
         return addBillItem(input);
     }, 
     deleteBill: async ({ id }) => {
+        console.log(typeof id);
         console.log("about to delete: " + id);
         try {
             await deleteBillItem(parseFloat(id));
         } catch (err) {
+            console.log(err);
             return { successful: false };
         }
         return { successful: true };

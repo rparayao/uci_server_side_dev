@@ -55,11 +55,8 @@ export const getPastDue = (owner_id) => {
     return data;
 }
 
-
-
-
-
 export const deleteBillItem = async idx =>{
+    console.log(typeof idx);
     await knex('bill_items').where({id: idx}).del()
 }
 

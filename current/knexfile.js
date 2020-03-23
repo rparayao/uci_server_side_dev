@@ -26,7 +26,7 @@ module.exports  = {
         connection: {
             database: 'monthly-bills-test',
             user: 'postgres',
-            password: 'xxxx'
+            password: 'xxxxx'
         }
     }
 

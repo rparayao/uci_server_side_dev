@@ -41,7 +41,9 @@ app.use('/api', expressgraphql({
   rootValue: resolvers,
   graphiql: true,
 }));
-app.listen(4000);
-console.log('Running a GraphQL API server at http://localhost:4000/api');
+ app.listen(process.env.PORT, () => 
+    console.log('Listening on port ${process.env.PORT}'));
+// app.listen(4000);
+// console.log('Running a GraphQL API server at http://localhost:4000/api');
 
 
